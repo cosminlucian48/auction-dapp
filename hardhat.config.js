@@ -20,13 +20,13 @@ module.exports = {
     artifacts:"./blockchain/artifacts"
   },
   networks:{
+    local:{
+      url: secrets.localnode,
+      accounts: [secrets.privateKeyLocalAccount]
+    },
     mumbai:{
       url: secrets.mumbainode,
       accounts: [secrets.privateKey]
-    },
-    // ethereum:{
-    //   url: secret.ethereumnode,
-    //   accounts: [secret.privateKeyEth]
-    // }
+    }
   } 
 };

@@ -1,8 +1,8 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\Users\\danie\\Desktop\\d-app\\blockchain\\contracts\\Auction.sol": {
-      "lastModificationDate": 1647179904975,
+    "C:\\Users\\cbeja\\Documents\\proiecte\\auction-dapp-angular\\auction-dapp\\blockchain\\contracts\\Auction.sol": {
+      "lastModificationDate": 1647180200059,
       "contentHash": "fd2b66baeabbe2e1fe4ea509284ded74",
       "sourceName": "blockchain/contracts/Auction.sol",
       "solcConfig": {
