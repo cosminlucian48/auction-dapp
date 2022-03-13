@@ -3,19 +3,13 @@ const { ethers } = require('hardhat');
 
 async function main(){
 
-    const BankContract = await ethers.getContractFactory("Bank");
-    const bank = await BankContract.deploy();
-    await bank.deployed();
-    console.log("The bank contract was deployed to: " + bank.address);
-
-    const TokenContract = await ethers.getContractFactory("Token");
-    const token = await TokenContract.deploy(bank.address);
-    await token.deployed();
-    console.log("The token contract was deployed to: " + token.address);
+    const AuctionContract = await ethers.getContractFactory("Auction");
+    const auction = await AuctionContract.deploy(30);
+    await auction.deployed();
+    console.log("The auction contract was deployed to: " + auction.address);
 
     let addresses = {
-        "bankcontract": bank.address, 
-        "tokencontract":token.address
+        "auctioncontract": auction.address
     };
     let addressesJSON = JSON.stringify(addresses);
     fs.writeFileSync("environment/contract-address.json", addressesJSON);
