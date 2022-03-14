@@ -4,8 +4,7 @@ import { Component } from '@angular/core';
 // import { FormControl , FormGroup} from '@angular/forms';
 
 import addresses from '../../environment/contract-address.json';
-import Bank from '../../blockchain/artifacts/blockchain/contracts/Bank.sol/Bank.json';
-import Token from '../../blockchain/artifacts/blockchain/contracts/Token.sol/Token.json';
+
 
 @Component({
   selector: 'app-root',

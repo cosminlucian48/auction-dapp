@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Creare licitatie</h1>
+<div mat-dialog-content>
+  <form [formGroup]="profileForm">
+
+    <label for="name-item">Item name: </label>
+    <input id="name-item" type="text" formControlName="nameItem">
+
+    <label for="deployment-time">Deployment time: </label>
+    <input id="deployment-time" type="text" formControlName="deploymentTime">
+
+    <label for="initial-bid">Initial bid: </label>
+    <input id="dinitial-bid" type="text" formControlName="initialBid">
+
+  </form>
+  <br>
+  <app-button label="Adauga licitatie" (click)="onSubmit()"></app-button>
+</div>
