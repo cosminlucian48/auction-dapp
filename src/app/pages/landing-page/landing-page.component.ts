@@ -3,15 +3,24 @@ import { Router } from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import { PopUpCreateAuctionComponent } from 'src/app/components/pop-up-create-auction/pop-up-create-auction.component';
 
+import { MetamaskService } from 'src/app/services/metamask.service';
+// import '@typechain/hardhat';
+// import '@nomiclabs/hardhat-ethers';
+// import '@nomiclabs/hardhat-waffle';
+// import { ethers, waffle } from 'hardhat'
+
+
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
-  constructor(private route: Router, public dialog: MatDialog) { }
+  checkIfFactoryIsReady:boolean = false;
+  constructor(private route: Router, public dialog: MatDialog,public metamaskService:MetamaskService) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.checkIfFactoryIsReady = await this.metamaskService.createAuctionFactoryContractInstance();
   }
 
   nextPage()
@@ -21,6 +30,7 @@ export class LandingPageComponent implements OnInit {
 
   openDialog(){
     const dialogRef = this.dialog.open(PopUpCreateAuctionComponent);
+    
 
   }
 }

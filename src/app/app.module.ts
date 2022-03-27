@@ -12,6 +12,7 @@ import { PopUpCreateAuctionComponent } from './components/pop-up-create-auction/
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { AuctionPageComponent } from './pages/auction-page/auction-page.component';
 import { AppRoutingModule } from './app-routing.module';
+import { MetamaskService } from './services/metamask.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { AppRoutingModule } from './app-routing.module';
     NgbModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [MetamaskService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,9 +2,12 @@ pragma solidity ^0.8.4;
 
 contract Auction{
     address payable public beneficiary;
+    
     uint public endTime; // in secunde
+    string public item;
     address public highestBidder;
     uint public highestBid;
+    uint public initialBid;
     bool public timesUp;
 
     mapping(address => uint) public pendingReturns;
@@ -12,9 +15,11 @@ contract Auction{
     event BidIncreased(address bidder, uint amount);
     event AuctionEnded(address auctionWinner, uint amount);
 
-    constructor(uint time){
+    constructor(uint time,string memory name,uint initBid){
         beneficiary = payable (msg.sender);
         endTime = block.timestamp + time;
+        item = name;
+        initialBid = initBid;
     }
 
     function bid() public payable{
@@ -62,8 +67,21 @@ contract Auction{
     function fHighestBid() public view returns(uint){
         return highestBid;
     }
+    function fInitialHighestBid() public view returns(uint){
+        return initialBid;
+    }
 
+    function fHighestBiddder() public view returns(address){
+        return highestBidder;
+    }
     function senderPendingReturns() public view returns(uint){
         return pendingReturns[msg.sender];
     }
+    function getItemName() public view returns(string memory){
+        return item;
+    }
+    function getItemEndTime() public view returns (uint){
+        return endTime;
+    }
+    
 }

@@ -1,15 +1,19 @@
 <mat-card class="example-card">
   <mat-card-title-group>
-    <mat-card-title>Licitatia norocului</mat-card-title>
+    <mat-card-title>{{itemName}}</mat-card-title>
     <img mat-card-sm-image src="https://www.thespruce.com/thmb/t13CIs9CH0HfuggdQ-DU9zk_QHo=/3780x2126/smart/filters:no_upscale()/do-ducks-have-teeth-4153828-hero-9614a7e9f4a049b48e8a35a9296c562c.jpg" >
   </mat-card-title-group>
   <mat-card-content>
-    <p>Bid initial:</p>
-    <p>Highest bid:</p>
-    <p>Test initial:</p>
-    <label for="fname">Place your bid:</label>
-  <input type="text" id="fname" name="fname">
+    <p>Bid initial: {{itemInitialBid}}</p>
+    <p>Highest bid: {{itemHighestBidd}}</p>
+    <p>End Time: {{itemEndTime}}</p>
+    <!-- <label for="fname">Place your bid:</label> -->
+    <mat-form-field  appearance="fill">
+      <mat-label>Your bid</mat-label>
+      <input matInput type="text" id="fname" name="fname" [(ngModel)]="bidValue">
+    </mat-form-field>
+  
   <br><br>
-  <input type="submit" value="Submit">
+  <app-button label="Submit"  (click) = "bidOnAuction()"></app-button>
   </mat-card-content>
 </mat-card>

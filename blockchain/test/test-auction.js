@@ -7,32 +7,53 @@ describe("auction App", ()=>{
 
     beforeEach(async () => {
         const auctionContract = await ethers.getContractFactory("Auction");
-        auction = await auctionContract.deploy(100);
-        await auction.deployed();
+        const auctionFactoryContract = await ethers.getContractFactory("AuctionFactory");
+        // auction = await auctionContract.deploy(100);
+        // auction2 = await auctionContract.deploy(100);
+        auctionFactory = await auctionFactoryContract.deploy();
+        
+        await auctionFactory.deployed();
+        // console.log(auctionFactory);
+        // await auction.deployed();
+        // await auction2.deployed();
+        // console.log("Auction: ", auction.address);
+        // console.log("Auction2: ", auction2.address);
 
         [owner, address_1, address_2, ...addresses] = await ethers.getSigners();
+        // console.log(auction2)
     });
 
     describe("Deployment", () =>{
         it("Should have highest bid of 0", async() =>{    // toate callurile catre smartcontract sunt promises
-            expect(await auction.fHighestBid()).to.equal("0");
+            auction = await auctionFactory.newAuction("Ana");
+            auction2 = await auctionFactory.newAuction("mere");
+            auction = await auction.wait();
+            // console.log(auction);
+            // console.log(await auction.wait());
+            // console.log(auction.address);
+            console.log(await auctionFactory.getAuciton(0));
+            console.log(await auctionFactory.getAuciton(1));
+            console.log(await auctionFactory.auctionsAddresses);
+            expect(await auctionFactory.getContractCount()).to.equal("2");
         });
     });
 
-    describe("Bids", () =>{
-        const oneEth = ethers.utils.parseEther("1.0"); //utility function to allow as to get ether
+    // describe("Bids", () =>{
+    //     const oneEth = ethers.utils.parseEther("1.0"); //utility function to allow as to get ether
         
-        it("Should have highest bid != 0", async() =>{    // toate callurile catre smartcontract sunt promises
-            await auction.connect(address_1).bid({value:oneEth});
-            expect(await auction.fHighestBid()).to.equal(oneEth);
-        });
+    //     it("Should have highest bidder == address1", async() =>{    // toate callurile catre smartcontract sunt promises
+    //         await auction.connect(address_1).bid({value:oneEth});
+    //         await auction2.connect(address_2).bid({value:oneEth});
+    //         expect(await auction.fHighestBiddder()).to.equal(address_1.address);
+    //         expect(await auction2.fHighestBiddder()).to.equal(address_2.address);
+    //     });
 
-        it("Should have highest bid != 0", async() =>{    // toate callurile catre smartcontract sunt promises
-            await auction.connect(address_1).bid({value:oneEth});
-            await auction.connect(address_1).withdraw();
-            expect(await auction.senderPendingReturns()).to.equal("0");
-        });
-    });
+    //     it("Should have highest bid != 0", async() =>{    // toate callurile catre smartcontract sunt promises
+    //         await auction.connect(address_1).bid({value:oneEth});
+    //         await auction.connect(address_1).withdraw();
+    //         expect(await auction.senderPendingReturns()).to.equal("0");
+    //     });
+    // });
 
 
     // describe("Deployment", () =>{
