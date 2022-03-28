@@ -1,4 +1,3 @@
-
 import { Component, OnInit, Input } from '@angular/core';
 import { MetamaskService } from '../../services/metamask.service';
 import { ethers } from 'ethers';
@@ -8,6 +7,8 @@ import addresses from '../../../../environment/contract-address.json';
 import Auction from '../../../../blockchain/artifacts/blockchain/contracts/Auction.sol/Auction.json';
 import AuctionFactory from '../../../../blockchain/artifacts/blockchain/contracts/AuctionFactory.sol/AuctionFactory.json';
 import { Meta } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -27,16 +28,17 @@ export class AuctionBoxComponent implements OnInit {
   itemEndTime: any;
   itemInitialBid: any;
   bidValue:number=0;
-
   private ethPrecision = 10 ** 18;
-  constructor(public metamaskService: MetamaskService) { }
+  constructor(
+    public metamaskService: MetamaskService,
+    private router: Router) { }
 
   async ngOnInit() {
     const datepipe: DatePipe = new DatePipe('en-US');
 
     this.signer = this.metamaskService.getSigner();
     this.auction = new ethers.Contract(this.auctionAddress, Auction.abi, this.signer);
-    
+
     this.auction.getItemEndTime().then(
       (response: number) => {
         var d = new Date(0);
@@ -80,7 +82,6 @@ export class AuctionBoxComponent implements OnInit {
           alert("Error when retrieving initial bidd.");
         }
       });
-
     // let dateTime= new Date().getTime() / 1000;
     // this.auctionFactoryContract = new ethers.ContractFactory( Auction.abi,Auction.bytecode,this.signer);
 
@@ -101,18 +102,17 @@ export class AuctionBoxComponent implements OnInit {
     //     // console.log(this.auctionFactoryContract)
     //   }
     // }
-
-
-
-
   }
 
   async bidOnAuction(){
     const account = this.metamaskService.getAccount();
     if(this.bidValue!=0){
       this.auction.bid({ from: account, value:  ethers.utils.parseEther(this.bidValue.toString()) }).then(
-        ()=>{
-          console.log("Bid placed succesfully.");
+        (responseBid: any)=>{
+          console.log("Bid placed succesfully.", responseBid);
+          responseBid.wait().then(() => {
+            this.itemHighestBidd = this.bidValue.toString();
+          })
         }
       ).catch(
         (error:any)=>{
@@ -124,6 +124,4 @@ export class AuctionBoxComponent implements OnInit {
     //   console.log("MERE?:",mere);
     // }
   }
-
-
 }

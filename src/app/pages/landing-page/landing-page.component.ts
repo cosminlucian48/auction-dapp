@@ -28,9 +28,12 @@ export class LandingPageComponent implements OnInit {
     this.route.navigateByUrl("/auction")
   }
 
+  anotherPage()
+  {
+    this.route.navigateByUrl("/nft")
+  }
+
   openDialog(){
     const dialogRef = this.dialog.open(PopUpCreateAuctionComponent);
-    
-
   }
 }

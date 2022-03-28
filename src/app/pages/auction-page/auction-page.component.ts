@@ -31,16 +31,16 @@ export class AuctionPageComponent implements OnInit {
       this.getAddresses();
     }
     console.log("De ce:",this.auctionFactoryContract);
-    
 
-    
+
+
 
 
     // this.auctionsAddresses = await this.auctionFactoryContract.getAllAuctionsAddresses();
     // if(this.auctionsAddresses){
     //   console.log(this.auctionsAddresses);
     // }
-    
+
   }
   getAddresses(){
     this.auctionFactoryContract = this.metamaskService.getAuctionFactory();

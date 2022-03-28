@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuctionPageComponent } from './pages/auction-page/auction-page.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { NftPageComponent } from './pages/nft-page/nft-page.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,10 @@ const routes: Routes = [
     {
         path: 'auction',
         component: AuctionPageComponent
+    },
+    {
+      path: 'nft',
+      component:NftPageComponent
     }
 ];
 

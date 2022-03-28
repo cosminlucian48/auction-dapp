@@ -13,6 +13,7 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { AuctionPageComponent } from './pages/auction-page/auction-page.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MetamaskService } from './services/metamask.service';
+import { NftPageComponent } from './pages/nft-page/nft-page.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { MetamaskService } from './services/metamask.service';
     PopUpCreateAuctionComponent,
     AuctionPageComponent,
     HeaderComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    NftPageComponent
 
   ],
   imports: [

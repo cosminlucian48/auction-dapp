@@ -39,7 +39,7 @@ export class MetamaskService{
         if(checkIfMetamaskUserIsValid){
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             console.log("Provider:",provider);
-            
+
             provider.on("network", (netNetwork: any, oldNetwork:any) => {
             if(oldNetwork){
                 window.location.reload();
@@ -50,8 +50,9 @@ export class MetamaskService{
             console.log("Signer:",this.signer);
 
             if (await this.signer.getChainId() !==31337){
+            //  console.log(await this.signer.getChainId());
             alert("Wrong network");
-            
+
             }
             this.auctionFactoryContract = new ethers.Contract(addresses.auctionFactoryContract, AuctionFactory.abi,this.signer);
             return true;
@@ -80,6 +81,6 @@ export class MetamaskService{
         }
         return null;
     }
-    
+
     // provider = new ethers.providers.Web3Provider(this.window.ethereum);
 }
