@@ -7,6 +7,7 @@
     <p>Bid initial: {{itemInitialBid}}</p>
     <p>Highest bid: {{itemHighestBidd}}</p>
     <p>End Time: {{itemEndTime}}</p>
+    <p>Pending return for you: {{pendingReturnForUser}}</p>
     <!-- <label for="fname">Place your bid:</label> -->
     <mat-form-field  appearance="fill">
       <mat-label>Your bid</mat-label>
@@ -15,9 +16,7 @@
 
   <br><br>
   <app-button label="Creare bid"  (click) = "bidOnAuction()"></app-button>
+  <app-button label="Withdraw"  (click) = "withdrawFromAuction()"></app-button>
   </mat-card-content>
 </mat-card>
 
-<ng-template #spinner>
-  <mat-progress-spinner></mat-progress-spinner>
-</ng-template>

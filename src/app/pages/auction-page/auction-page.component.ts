@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ethers } from 'ethers';
 import { MetamaskService } from 'src/app/services/metamask.service';
+import Auction from '../../../../blockchain/artifacts/blockchain/contracts/Auction.sol/Auction.json';
 
 @Component({
   selector: 'app-auction-page',
@@ -12,6 +14,7 @@ export class AuctionPageComponent implements OnInit {
   auctionsAddresses:any;
   auctionFactoryContract:any;
   signer:any;
+  auctions: Array<any> = new Array;
   constructor(private route: Router,public metamaskService:MetamaskService) { }
 
   ngOnInit():void {
@@ -43,12 +46,27 @@ export class AuctionPageComponent implements OnInit {
 
   }
   getAddresses(){
+    this.signer = this.metamaskService.getSigner();
+    const actualDate = new Date();
     this.auctionFactoryContract = this.metamaskService.getAuctionFactory();
           if(this.auctionFactoryContract){
             this.auctionFactoryContract.getAllAuctionsAddresses().then(
               (response: string) => {
                 console.log("Addresses:",response);
                 this.auctionsAddresses = response;
+                this.auctionsAddresses.forEach((element: any) =>{
+                  var auction : any = new ethers.Contract(element, Auction.abi, this.signer);
+                  auction.getItemEndTime().then((response: number) => {
+                    var d = new Date(0);
+                    d.setUTCSeconds(response);
+                    if(d.getTime() > actualDate.getTime()){
+                      this.auctions.push(auction);
+                    }
+                  }).catch((error:any) => {
+                    alert("Error when retrieving Auction end time");
+                  });
+
+                })
               }).catch((error: any) => {
                 alert("Error when retrieving item name.")
               });

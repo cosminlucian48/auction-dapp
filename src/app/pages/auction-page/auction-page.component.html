@@ -5,6 +5,6 @@
 <app-auction-box></app-auction-box>
 <app-auction-box></app-auction-box> -->
 <app-button class="back" label="Back" (click)="back()"></app-button>
-<div class="auction-box" *ngFor="let address of auctionsAddresses">
-    <app-auction-box [auctionAddress] = "address"></app-auction-box>
+<div class="auction-box" *ngFor="let auc of auctions">
+    <app-auction-box [auction] = "auc"></app-auction-box>
 </div>

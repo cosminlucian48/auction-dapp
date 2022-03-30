@@ -28,7 +28,8 @@ export class PopUpCreateAuctionComponent implements OnInit {
       this.auctionToBeCreated = this.auctionFactoryContract.newAuction(
         this.profileForm.controls['nameItem'].value,
         this.profileForm.controls['initialBid'].value,
-        this.profileForm.controls['deploymentTime'].value*3600).then(
+        // adauga aici pt poza
+        this.profileForm.controls['deploymentTime'].value).then(
           (responseBid:any) => {
             responseBid.wait().then(() => {
               this.close();

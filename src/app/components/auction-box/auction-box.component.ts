@@ -19,8 +19,7 @@ import { Router } from '@angular/router';
 export class AuctionBoxComponent implements OnInit {
 
   auctionFactoryContract: any;
-  @Input() auctionAddress: any;
-  auction: any;
+  @Input() auction: any;
   signer: any;
   itemName: any;
   itemHighestBidd: any;
@@ -28,6 +27,7 @@ export class AuctionBoxComponent implements OnInit {
   itemEndTime: any;
   itemInitialBid: any;
   bidValue:number=0;
+  pendingReturnForUser: any;
   private ethPrecision = 10 ** 18;
   constructor(
     public metamaskService: MetamaskService,
@@ -37,7 +37,6 @@ export class AuctionBoxComponent implements OnInit {
     const datepipe: DatePipe = new DatePipe('en-US');
 
     this.signer = this.metamaskService.getSigner();
-    this.auction = new ethers.Contract(this.auctionAddress, Auction.abi, this.signer);
 
     this.auction.getItemEndTime().then(
       (response: number) => {
@@ -82,6 +81,9 @@ export class AuctionBoxComponent implements OnInit {
           alert("Error when retrieving initial bidd.");
         }
       });
+      this.auction.senderPendingReturns({from:this.metamaskService.getAccount()}).then((response:number) => {
+        this.pendingReturnForUser=(response/this.ethPrecision).toString();
+      })
     // let dateTime= new Date().getTime() / 1000;
     // this.auctionFactoryContract = new ethers.ContractFactory( Auction.abi,Auction.bytecode,this.signer);
 
@@ -120,8 +122,22 @@ export class AuctionBoxComponent implements OnInit {
         }
       );
     }
+
     // if(mere){
     //   console.log("MERE?:",mere);
     // }
+  }
+  withdrawFromAuction(){
+    const account = this.metamaskService.getAccount();
+    this.auction.withdraw({from:account}).then((response: boolean) =>{
+      if(response)
+      {console.log("daca taci sa taci");
+      this.pendingReturnForUser = 0;
+      }
+      else
+      {
+        console.log("ok")
+      }
+    })
   }
 }
