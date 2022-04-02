@@ -24,7 +24,7 @@ contract AuctionFactory{
 
     function newAuctionNFT(address recipient, string memory tokenURI)public returns(AuctionNFT){
         AuctionNFT auctionNFT = new AuctionNFT();
-        auctionNFT.mintNFT(recipient, tokenURI);
+        // auctionNFT.mintNFT(recipient, tokenURI);
 
         auctionNFTs.push(auctionNFT);
         auctionsNFTAddresses.push(address(auctionNFT));

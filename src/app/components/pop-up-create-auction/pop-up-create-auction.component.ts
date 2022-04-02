@@ -31,17 +31,23 @@ export class PopUpCreateAuctionComponent implements OnInit {
       const res = await this.pinataService.pinFileToIPFS(this.file);
       console.log(res);
       if(res){
+        let auctionNFT = this.auctionFactoryContract.newAuctionNFT(this.metamaskService.getAccount(), res).then((response: any) => {
+          console.log(response);
+        }).catch((error: any) => {
+          console.log(error);
+        });
+
         this.auctionToBeCreated = this.auctionFactoryContract.newAuction(
           this.profileForm.controls['nameItem'].value,
           this.profileForm.controls['initialBid'].value,
           // adauga aici pt poza
-          this.profileForm.controls['deploymentTime'].value, 
-          this.metamaskService.getAccount(), 
-          res).then(
+          this.profileForm.controls['deploymentTime'].value).then(
             (responseBid:any) => {
               responseBid.wait().then(() => {
                 this.close();
               })
+          }).catch((error: any) => {
+            console.log(error);
           });
   
         if(this.auctionToBeCreated){

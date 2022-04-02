@@ -37,8 +37,8 @@
       ]
     },
     "C:\\Users\\danie\\Desktop\\d-app\\blockchain\\contracts\\AuctionFactory.sol": {
-      "lastModificationDate": 1648898084544,
-      "contentHash": "026376afb8e35eedcb9b37ecaa3806ca",
+      "lastModificationDate": 1648919900518,
+      "contentHash": "a4cf4805128badef143bffcdc9b898ae",
       "sourceName": "blockchain/contracts/AuctionFactory.sol",
       "solcConfig": {
         "version": "0.7.1",
@@ -624,8 +624,8 @@
       ]
     },
     "C:\\Users\\danie\\Desktop\\d-app\\blockchain\\contracts\\AuctionNFT.sol": {
-      "lastModificationDate": 1648897266304,
-      "contentHash": "6474952290258c9849ade6a736a23291",
+      "lastModificationDate": 1648920010212,
+      "contentHash": "28387aa0db7b564d243918c3eebb904e",
       "sourceName": "blockchain/contracts/AuctionNFT.sol",
       "solcConfig": {
         "version": "0.7.1",

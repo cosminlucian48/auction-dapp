@@ -9,7 +9,7 @@ contract AuctionNFT is ERC721, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    constructor() public ERC721("AuctionNFT", "NFT") {}
+    constructor() public ERC721("AuctionNFT1", "NFT") {}
 
     function mintNFT(address recipient, string memory tokenURI) public onlyOwner returns (uint256){
         _tokenIds.increment();
