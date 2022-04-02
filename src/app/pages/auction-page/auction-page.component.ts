@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ethers } from 'ethers';
 import { MetamaskService } from 'src/app/services/metamask.service';
 import Auction from '../../../../blockchain/artifacts/blockchain/contracts/Auction.sol/Auction.json';
+import AuctionNFT from '../../../../blockchain/artifacts/blockchain/contracts/AuctionNFT.sol/AuctionNFT.json';
 
 @Component({
   selector: 'app-auction-page',
@@ -69,7 +70,15 @@ export class AuctionPageComponent implements OnInit {
                 })
               }).catch((error: any) => {
                 alert("Error when retrieving item name.")
+                console.log({getAddresses: error});
               });
+              
+            this.auctionFactoryContract.getAllAuctionNFTAddresses().then((nft: any) => {
+              console.log({NFT: nft});
+            }).catch((error: any) => {
+              console.log({NFT: error});
+              
+            })
           }
   }
 

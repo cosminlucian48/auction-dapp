@@ -15,16 +15,16 @@ contract AuctionFactory{
     }
     
     function newAuction(string memory name, uint initialBid, uint time) public returns(Auction newContract){
-        Auction auc = new Auction(time, name,initialBid);
+        Auction auc = new Auction(time, name, initialBid);
         auctions.push(auc);
         auctionsAddresses.push(address(auc));
         
         return auc;
     }
 
-    function newAuctionNFT(address recipient, string memory tokenURI)public returns(AuctionNFT){
+    function newAuctionNFT(string memory tokenURI)public returns(AuctionNFT){
         AuctionNFT auctionNFT = new AuctionNFT();
-        // auctionNFT.mintNFT(recipient, tokenURI);
+        auctionNFT.mintNFT(msg.sender, tokenURI);
 
         auctionNFTs.push(auctionNFT);
         auctionsNFTAddresses.push(address(auctionNFT));
@@ -42,6 +42,8 @@ contract AuctionFactory{
     function getAllAuctionsAddresses() public view returns (address[] memory listOfAuctions){
         return auctionsAddresses;
     }
-    
+    function getAllAuctionNFTAddresses() public view returns (address[] memory listOfAuctionsNFT){
+        return auctionsNFTAddresses;
+    }
 
 }

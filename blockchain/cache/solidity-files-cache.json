@@ -37,8 +37,8 @@
       ]
     },
     "C:\\Users\\danie\\Desktop\\d-app\\blockchain\\contracts\\AuctionFactory.sol": {
-      "lastModificationDate": 1648919900518,
-      "contentHash": "a4cf4805128badef143bffcdc9b898ae",
+      "lastModificationDate": 1648922394842,
+      "contentHash": "7efd93303b1799e2d816c38c82b54de7",
       "sourceName": "blockchain/contracts/AuctionFactory.sol",
       "solcConfig": {
         "version": "0.7.1",
@@ -72,6 +72,45 @@
       ],
       "artifacts": [
         "AuctionFactory"
+      ]
+    },
+    "C:\\Users\\danie\\Desktop\\d-app\\blockchain\\contracts\\AuctionNFT.sol": {
+      "lastModificationDate": 1648920705808,
+      "contentHash": "6a776c1dc4f13da3fe2cf00d50cb62f0",
+      "sourceName": "blockchain/contracts/AuctionNFT.sol",
+      "solcConfig": {
+        "version": "0.7.1",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+        "@openzeppelin/contracts/utils/Counters.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "0.7.1"
+      ],
+      "artifacts": [
+        "AuctionNFT"
       ]
     },
     "C:\\Users\\danie\\Desktop\\d-app\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\ERC721.sol": {
@@ -621,45 +660,6 @@
       ],
       "artifacts": [
         "IERC165"
-      ]
-    },
-    "C:\\Users\\danie\\Desktop\\d-app\\blockchain\\contracts\\AuctionNFT.sol": {
-      "lastModificationDate": 1648920010212,
-      "contentHash": "28387aa0db7b564d243918c3eebb904e",
-      "sourceName": "blockchain/contracts/AuctionNFT.sol",
-      "solcConfig": {
-        "version": "0.7.1",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
-        "@openzeppelin/contracts/utils/Counters.sol",
-        "@openzeppelin/contracts/access/Ownable.sol"
-      ],
-      "versionPragmas": [
-        "0.7.1"
-      ],
-      "artifacts": [
-        "AuctionNFT"
       ]
     }
   }

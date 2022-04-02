@@ -31,7 +31,7 @@ export class PopUpCreateAuctionComponent implements OnInit {
       const res = await this.pinataService.pinFileToIPFS(this.file);
       console.log(res);
       if(res){
-        let auctionNFT = this.auctionFactoryContract.newAuctionNFT(this.metamaskService.getAccount(), res).then((response: any) => {
+        let auctionNFT = this.auctionFactoryContract.newAuctionNFT(res, { from: this.metamaskService.getAccount()}).then((response: any) => {
           console.log(response);
         }).catch((error: any) => {
           console.log(error);
