@@ -14,6 +14,7 @@ import { AuctionPageComponent } from './pages/auction-page/auction-page.componen
 import { AppRoutingModule } from './app-routing.module';
 import { MetamaskService } from './services/metamask.service';
 import { NftPageComponent } from './pages/nft-page/nft-page.component';
+import { PinataService } from './services/pinata.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { NftPageComponent } from './pages/nft-page/nft-page.component';
     NgbModule,
     AppRoutingModule,
   ],
-  providers: [MetamaskService],
+  providers: [MetamaskService, PinataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

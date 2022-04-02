@@ -1,11 +1,14 @@
-pragma solidity ^0.8.4;
+pragma solidity 0.7.1;
 import "./Auction.sol";
+import "./AuctionNFT.sol";
 
 
 contract AuctionFactory{
     
     Auction[] public auctions;
+    AuctionNFT[] public auctionNFTs;
     address[] public auctionsAddresses;
+    address[] public auctionsNFTAddresses;
 
     function getContractCount() public view returns(uint){
         return auctions.length;
@@ -17,6 +20,16 @@ contract AuctionFactory{
         auctionsAddresses.push(address(auc));
         
         return auc;
+    }
+
+    function newAuctionNFT(address recipient, string memory tokenURI)public returns(AuctionNFT){
+        AuctionNFT auctionNFT = new AuctionNFT();
+        auctionNFT.mintNFT(recipient, tokenURI);
+
+        auctionNFTs.push(auctionNFT);
+        auctionsNFTAddresses.push(address(auctionNFT));
+
+        return auctionNFT;
     }
 
     function checkAuction(uint number) public view returns(address auc){

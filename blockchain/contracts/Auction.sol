@@ -1,4 +1,4 @@
-pragma solidity ^0.8.4;
+pragma solidity 0.7.1;
 
 contract Auction{
     address payable public beneficiary;

@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { LandingPageComponent } from 'src/app/pages/landing-page/landing-page.component';
 import { MetamaskService } from 'src/app/services/metamask.service';
+import { PinataService } from 'src/app/services/pinata.service'; 
 
 @Component({
   selector: 'app-pop-up-create-auction',
@@ -13,6 +14,8 @@ import { MetamaskService } from 'src/app/services/metamask.service';
 export class PopUpCreateAuctionComponent implements OnInit {
   auctionFactoryContract:any;
   auctionToBeCreated:any;
+  srcResult: any;
+  file: any;
 
   profileForm = new FormGroup({
     nameItem: new FormControl(''),
@@ -25,44 +28,41 @@ export class PopUpCreateAuctionComponent implements OnInit {
     // TODO: Use EventEmitter with form value
     console.warn(this.profileForm.value);
     if(this.auctionFactoryContract!=null){
-      this.auctionToBeCreated = this.auctionFactoryContract.newAuction(
-        this.profileForm.controls['nameItem'].value,
-        this.profileForm.controls['initialBid'].value,
-        // adauga aici pt poza
-        this.profileForm.controls['deploymentTime'].value).then(
-          (responseBid:any) => {
-            responseBid.wait().then(() => {
-              this.close();
-            })
-        });
-
-      if(this.auctionToBeCreated){
-
-        console.log("Licitatia noua:", this.auctionToBeCreated);
+      const res = await this.pinataService.pinFileToIPFS(this.file);
+      console.log(res);
+      if(res){
+        this.auctionToBeCreated = this.auctionFactoryContract.newAuction(
+          this.profileForm.controls['nameItem'].value,
+          this.profileForm.controls['initialBid'].value,
+          // adauga aici pt poza
+          this.profileForm.controls['deploymentTime'].value, 
+          this.metamaskService.getAccount(), 
+          res).then(
+            (responseBid:any) => {
+              responseBid.wait().then(() => {
+                this.close();
+              })
+          });
+  
+        if(this.auctionToBeCreated){
+  
+          console.log("Licitatia noua:", this.auctionToBeCreated);
+        }
       }
+      
     }
   }
 
 
-  constructor(public metamaskService:MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, private route: Router
+  constructor(public metamaskService:MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, private route: Router, public pinataService: PinataService
   ) { }
 
   close(): void {
     this.dialogRef.close();
   }
 
-  onFileSelected() {
-    const inputNode: any = document.querySelector('#file');
-
-    if (typeof (FileReader) !== 'undefined') {
-      const reader = new FileReader();
-
-      // reader.onload = (e: any) => {
-      //   this.srcResult = e.target.result;
-      // };
-
-      reader.readAsArrayBuffer(inputNode.files[0]);
-    }
+  onFileSelected(event: any) {
+    this.file = event.target.files[0];
   }
   ngOnInit(): void {
     this.auctionFactoryContract = this.metamaskService.getAuctionFactory();

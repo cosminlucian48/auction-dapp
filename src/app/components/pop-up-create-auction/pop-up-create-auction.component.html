@@ -21,7 +21,7 @@
     </mat-form-field>
     <br>
     <button type="button" mat-raised-button (click)="fileInput.click()">Adauga NFT</button>
-<input hidden (change)="onFileSelected()" #fileInput type="file" id="file">
+<input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
   </form>
   <br>
   <app-button label="Adauga licitatie" id="closeModal" (click)="onSubmit()"></app-button>

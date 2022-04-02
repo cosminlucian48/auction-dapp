@@ -3,16 +3,16 @@ require("@nomiclabs/hardhat-waffle");
 // const { ethers } = require("hardhat");
 const secrets = require("./environment/secrets.json");
 
-task("accounts", "Prints the list of accounts", async() =>{
-  const accounts = await ethers.getSigners();
-  for (const account of accounts){
-    console.log(account.address);
-  }
-})
+// task("accounts", "Prints the list of accounts", async() =>{
+//   const accounts = await ethers.getSigners();
+//   for (const account of accounts){
+//     console.log(account.address);
+//   }
+// })
 
 
 module.exports = {
-  solidity: "0.8.4",
+  solidity: "0.7.1",
   paths:{
     sources:"./blockchain/contracts",
     tests:"./blockchain/test",
