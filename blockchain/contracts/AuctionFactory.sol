@@ -25,6 +25,7 @@ contract AuctionFactory{
         auctions.push(auc);
         auctionsAddresses.push(address(auc));
 
+
         auctionNFTs.push(auctionNFT);
         auctionsNFTAddresses.push(address(auctionNFT));
 
@@ -50,5 +51,6 @@ contract AuctionFactory{
     function getNftAddressForSender() public view returns (address){
         return auctionNFTmap[msg.sender];
     }
+
 
 }

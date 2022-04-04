@@ -32,6 +32,7 @@ export class PopUpCreateAuctionComponent implements OnInit {
       console.log("axios:",res);
       if (res) {
 
+
         this.auctionToBeCreated = this.auctionFactoryContract.newAuction(
           this.profileForm.controls['nameItem'].value,
           this.profileForm.controls['initialBid'].value,

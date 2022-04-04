@@ -84,7 +84,15 @@ export class AuctionPageComponent implements OnInit {
                 })
               }).catch((error: any) => {
                 alert("Error when retrieving item name.")
+                console.log({getAddresses: error});
               });
+              
+            this.auctionFactoryContract.getAllAuctionNFTAddresses().then((nft: any) => {
+              console.log({NFT: nft});
+            }).catch((error: any) => {
+              console.log({NFT: error});
+              
+            })
           }
   }
 
