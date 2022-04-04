@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 
 import addresses from '../../../../environment/contract-address.json';
 import Auction from '../../../../blockchain/artifacts/blockchain/contracts/Auction.sol/Auction.json';
+import AuctionNFT from '../../../../blockchain/artifacts/blockchain/contracts/AuctionNFT.sol/AuctionNFT.json';
 import AuctionFactory from '../../../../blockchain/artifacts/blockchain/contracts/AuctionFactory.sol/AuctionFactory.json';
 import { Meta } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
@@ -26,8 +27,10 @@ export class AuctionBoxComponent implements OnInit {
   itemHighestBidder: any;
   itemEndTime: any;
   itemInitialBid: any;
-  bidValue:number=0;
+  auctionNftAddress: any;
+  bidValue: number = 0;
   pendingReturnForUser: any;
+  pinataUrl: any;
   private ethPrecision = 10 ** 18;
   constructor(
     public metamaskService: MetamaskService,
@@ -81,9 +84,32 @@ export class AuctionBoxComponent implements OnInit {
           alert("Error when retrieving initial bidd.");
         }
       });
-      this.auction.senderPendingReturns({from:this.metamaskService.getAccount()}).then((response:number) => {
-        this.pendingReturnForUser=(response/this.ethPrecision).toString();
-      })
+    this.auction.senderPendingReturns({ from: this.metamaskService.getAccount() }).then((response: number) => {
+      this.pendingReturnForUser = (response / this.ethPrecision).toString();
+    })
+
+    this.auction.getNFTAddress().then(
+      (res: string) => {
+        this.auctionNftAddress = res;
+        let nft: any = new ethers.Contract(this.auctionNftAddress, AuctionNFT.abi, this.signer);
+        nft.getPinataUrl().then((res: any) => {
+          console.log("URL?:", res)
+          this.pinataUrl = res;
+        }).catch((err: any) => {
+          console.log({ error: err });
+        });
+      }
+    ).catch((err: any) => {
+      console.log({ error: err })
+    });
+    // console.log(this.auctionNftAddress);
+    // let nft:any = new ethers.Contract(this.auctionNftAddress, AuctionNFT.abi, this.signer);
+    // nft.getPinataUrl().then((res:any)=>{
+    //   console.log("URL?:",res)
+    //   this.pinataUrl = res;
+    // }).catch((err:any)=>{
+    //   console.log({error:err});
+    // });
     // let dateTime= new Date().getTime() / 1000;
     // this.auctionFactoryContract = new ethers.ContractFactory( Auction.abi,Auction.bytecode,this.signer);
 
@@ -106,18 +132,18 @@ export class AuctionBoxComponent implements OnInit {
     // }
   }
 
-  async bidOnAuction(){
+  async bidOnAuction() {
     const account = this.metamaskService.getAccount();
-    if(this.bidValue!=0){
-      this.auction.bid({ from: account, value:  ethers.utils.parseEther(this.bidValue.toString()) }).then(
-        (responseBid: any)=>{
+    if (this.bidValue != 0) {
+      this.auction.bid({ from: account, value: ethers.utils.parseEther(this.bidValue.toString()) }).then(
+        (responseBid: any) => {
           console.log("Bid placed succesfully.", responseBid);
           responseBid.wait().then(() => {
             this.itemHighestBidd = this.bidValue.toString();
           })
         }
       ).catch(
-        (error:any)=>{
+        (error: any) => {
           alert("Error when palcing the bid.")
         }
       );
@@ -127,15 +153,14 @@ export class AuctionBoxComponent implements OnInit {
     //   console.log("MERE?:",mere);
     // }
   }
-  withdrawFromAuction(){
+  withdrawFromAuction() {
     const account = this.metamaskService.getAccount();
-    this.auction.withdraw({from:account}).then((response: boolean) =>{
-      if(response)
-      {console.log("daca taci sa taci");
-      this.pendingReturnForUser = 0;
+    this.auction.withdraw({ from: account }).then((response: boolean) => {
+      if (response) {
+        console.log("daca taci sa taci");
+        this.pendingReturnForUser = 0;
       }
-      else
-      {
+      else {
         console.log("ok")
       }
     })

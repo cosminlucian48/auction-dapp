@@ -9,28 +9,29 @@ contract AuctionFactory{
     AuctionNFT[] public auctionNFTs;
     address[] public auctionsAddresses;
     address[] public auctionsNFTAddresses;
-
+    mapping(address => address) public auctionNFTmap;
     function getContractCount() public view returns(uint){
         return auctions.length;
     }
     
-    function newAuction(string memory name, uint initialBid, uint time) public returns(Auction newContract){
-        Auction auc = new Auction(time, name,initialBid);
+    function newAuction(string memory name, uint initialBid, uint time,address recipient, string memory tokenURI, string memory pinataUrl) public returns(Auction newContract){
+        
+        AuctionNFT auctionNFT = new AuctionNFT(pinataUrl);
+        Auction auc = new Auction(time, name,initialBid,address(auctionNFT));
+        
+
+        // auctionNFT.mintNFT(recipient, tokenURI);
+
         auctions.push(auc);
         auctionsAddresses.push(address(auc));
-        
-        return auc;
-    }
-
-    function newAuctionNFT(address recipient, string memory tokenURI)public returns(AuctionNFT){
-        AuctionNFT auctionNFT = new AuctionNFT();
-        // auctionNFT.mintNFT(recipient, tokenURI);
 
         auctionNFTs.push(auctionNFT);
         auctionsNFTAddresses.push(address(auctionNFT));
 
-        return auctionNFT;
+        auctionNFTmap[address(auc)] = address(auctionNFT);
+        return auc;
     }
+
 
     function checkAuction(uint number) public view returns(address auc){
         return auctionsAddresses[number];
@@ -43,5 +44,11 @@ contract AuctionFactory{
         return auctionsAddresses;
     }
     
+    function getAllAuctionNFTAddresses() public view returns (address[] memory){
+        return auctionsNFTAddresses;
+    }
+    function getNftAddressForSender() public view returns (address){
+        return auctionNFTmap[msg.sender];
+    }
 
 }

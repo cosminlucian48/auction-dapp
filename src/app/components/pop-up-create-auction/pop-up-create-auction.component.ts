@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { LandingPageComponent } from 'src/app/pages/landing-page/landing-page.component';
 import { MetamaskService } from 'src/app/services/metamask.service';
-import { PinataService } from 'src/app/services/pinata.service'; 
+import { PinataService } from 'src/app/services/pinata.service';
 
 @Component({
   selector: 'app-pop-up-create-auction',
@@ -12,8 +12,8 @@ import { PinataService } from 'src/app/services/pinata.service';
   styleUrls: ['./pop-up-create-auction.component.css']
 })
 export class PopUpCreateAuctionComponent implements OnInit {
-  auctionFactoryContract:any;
-  auctionToBeCreated:any;
+  auctionFactoryContract: any;
+  auctionToBeCreated: any;
   srcResult: any;
   file: any;
 
@@ -27,40 +27,41 @@ export class PopUpCreateAuctionComponent implements OnInit {
   async onSubmit() {
     // TODO: Use EventEmitter with form value
     console.warn(this.profileForm.value);
-    if(this.auctionFactoryContract!=null){
+    if (this.auctionFactoryContract != null) {
       const res = await this.pinataService.pinFileToIPFS(this.file);
-      console.log(res);
-      if(res){
-        let auctionNFT = this.auctionFactoryContract.newAuctionNFT(this.metamaskService.getAccount(), res).then((response: any) => {
-          console.log(response);
-        }).catch((error: any) => {
-          console.log(error);
-        });
+      console.log("axios:",res);
+      if (res) {
 
         this.auctionToBeCreated = this.auctionFactoryContract.newAuction(
           this.profileForm.controls['nameItem'].value,
           this.profileForm.controls['initialBid'].value,
           // adauga aici pt poza
-          this.profileForm.controls['deploymentTime'].value).then(
-            (responseBid:any) => {
+          this.profileForm.controls['deploymentTime'].value,
+          this.metamaskService.getAccount(),
+          res,
+          res.pinataUrl).then(
+            (responseBid: any) => {
               responseBid.wait().then(() => {
                 this.close();
               })
-          }).catch((error: any) => {
-            console.log(error);
-          });
-  
-        if(this.auctionToBeCreated){
-  
+            }).catch((error: any) => {
+              console.log(error);
+            });
+
+
+
+
+        if (this.auctionToBeCreated) {
+
           console.log("Licitatia noua:", this.auctionToBeCreated);
         }
       }
-      
+
     }
   }
 
 
-  constructor(public metamaskService:MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, private route: Router, public pinataService: PinataService
+  constructor(public metamaskService: MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, private route: Router, public pinataService: PinataService
   ) { }
 
   close(): void {

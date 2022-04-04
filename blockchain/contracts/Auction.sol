@@ -9,17 +9,18 @@ contract Auction{
     uint public highestBid;
     uint public initialBid;
     bool public timesUp;
-
+    address public nftAddress;
     mapping(address => uint) public pendingReturns;
 
     event BidIncreased(address bidder, uint amount);
     event AuctionEnded(address auctionWinner, uint amount);
 
-    constructor(uint time,string memory name,uint initBid){
+    constructor(uint time,string memory name,uint initBid, address nft){
         beneficiary = payable (msg.sender);
         endTime = block.timestamp + time;
         item = name;
         initialBid = initBid;
+        nftAddress = nft;
     }
 
     function bid() public payable{
@@ -83,5 +84,7 @@ contract Auction{
     function getItemEndTime() public view returns (uint){
         return endTime;
     }
-    
+    function getNFTAddress() public view returns (address){
+        return nftAddress;
+    }
 }
