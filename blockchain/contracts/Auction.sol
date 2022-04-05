@@ -9,18 +9,18 @@ contract Auction{
     uint public highestBid;
     uint public initialBid;
     bool public timesUp;
-    address public nftAddress;
+    uint public nftId;
     mapping(address => uint) public pendingReturns;
 
     event BidIncreased(address bidder, uint amount);
     event AuctionEnded(address auctionWinner, uint amount);
 
-    constructor(uint time,string memory name,uint initBid, address nft){
-        beneficiary = payable (msg.sender);
+    constructor(uint id,address benef,uint time,string memory name,uint initBid){
+        nftId = id;
+        beneficiary = payable(benef);
         endTime = block.timestamp + time;
         item = name;
         initialBid = initBid;
-        nftAddress = nft;
     }
 
     function bid() public payable{
@@ -51,14 +51,25 @@ contract Auction{
         return true;
     }
 
-    function auctionEnd() public{
-        require(block.timestamp > endTime, "Actiunea nu s-a terminat");
+    function auctionEnd() external {
+        require(block.timestamp >= endTime, "Actiunea nu s-a terminat");
         require(!timesUp, "Functia de end a fost deja apelata");
-
+        require(highestBid>0,"Nu exista highest bid.");
+        // require(address(this).balance > highestBid, "Nu ai destul eth.");
         timesUp = true;
+        // emit AuctionEnded(highestBidder, highestBid);
+        // beneficiary.send(3 ether);
 
-        beneficiary.transfer(highestBid);
-        emit AuctionEnded(highestBidder, highestBid);
+        // beneficiary.call.value(3 ether).gas(20317)();
+
+        beneficiary.transfer(3 ether);
+        // (bool sent, bytes memory data) = beneficiary.call{value: highestBid-1}(abi.encode(highestBid-1));
+        // require(sent, "Failed to send Ether");
+        
+    }
+
+    function getTotalBalanceOfContract() public view returns(uint){
+        return address(this).balance;
     }
 
     function auctionEnded() public view returns(bool){
@@ -84,7 +95,11 @@ contract Auction{
     function getItemEndTime() public view returns (uint){
         return endTime;
     }
-    function getNFTAddress() public view returns (address){
-        return nftAddress;
+    function getNFTId() public view returns (uint){
+        return nftId;
+    }
+
+    function getBeneficiary() public view returns(address){
+        return beneficiary;
     }
 }

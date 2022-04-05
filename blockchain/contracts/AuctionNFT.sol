@@ -4,57 +4,42 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-
 contract AuctionNFT is ERC721, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
-    string pinataURL;
+    mapping(address => uint256[]) public userOwnedTokens;
+    mapping(uint256 => uint256) public tokenIsAtIndex;
+    uint256[] public nftIds;
 
-    constructor(string memory pin) public ERC721("AuctionNFT1", "NFT") {
-        pinataURL = pin;
-        _mint(msg.sender, 1);
-
-    }
-    // function mintNFT(address recipient, string memory tokenURI) public onlyOwner returns (uint256){
-    //     _tokenIds.increment();
-
-    //     uint256 newItemId = _tokenIds.current();
-    //     _mint(recipient, newItemId);
-    //     _setTokenURI(newItemId, tokenURI);
-
-    //     return newItemId;
-    // }
-
-    function getPinataUrl() public view returns(string memory){
-        return pinataURL;
+    constructor() public ERC721("AuctionNFT", "ANFT") {
+        // _mint(msg.sender, 1);
     }
 
-    // function getOwner() public view returns(string memory){
-    //     return _owner;
-    // }
+    function mintNFT(string memory tokenURI)
+        public
+        returns (uint256)
+    {
+        _tokenIds.increment();
+
+        uint256 newItemId = _tokenIds.current();
+        nftIds.push(newItemId);
+        userOwnedTokens[msg.sender].push(newItemId);
+        uint256 arrayLength = userOwnedTokens[msg.sender].length;
+        tokenIsAtIndex[newItemId] = arrayLength;
+
+        _mint(msg.sender, newItemId);
+        _setTokenURI(newItemId, tokenURI);
+        return newItemId;
+    }
+    function getNFTIdsForUser(address add)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return userOwnedTokens[add];
+    }
+
+    function getNftIds() public view returns (uint256[] memory) {
+        return nftIds;
+    }
 }
-
-// // SPDX-License-Identifier: MIT
-// pragma solidity >=0.6.0 <0.8.0;
-// import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-// import "@openzeppelin/contracts/access/Ownable.sol";
-//  contract NFT is ERC721, Ownable {
-//     address payable public _owner;
-//     mapping(uint256 => bool) public sold;
-//     mapping(uint256 => uint256) public price;
-//     event Purchase(address owner, uint256 price, uint256 id, string uri);
-//     constructor() ERC721("YOUR TOKEN", "TOKEN") {
-//      _owner = msg.sender;
-//     }
-// function mint(string memory _tokenURI, uint256 _price)
-//  public
-//  onlyOwner
-//  returns (bool)
-//  {
-//     uint256 _tokenId = totalSupply() + 1;
-//     price[_tokenId] = _price;
-//     _mint(address(this), _tokenId);
-//     _setTokenURI(_tokenId, _tokenURI);
-//     return true;
-//  }
-// }

@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 
 import addresses from '../../../environment/contract-address.json';
 import Auction from '../../../blockchain/artifacts/blockchain/contracts/Auction.sol/Auction.json';
+import AuctionNFT from '../../../blockchain/artifacts/blockchain/contracts/AuctionNFT.sol/AuctionNFT.json';
 import AuctionFactory from '../../../blockchain/artifacts/blockchain/contracts/AuctionFactory.sol/AuctionFactory.json';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class MetamaskService{
     public auctionContract: any;
     public aucc:any;
     public account:any;
+    public nftContract:any;
     constructor(){
 
     }
@@ -55,6 +57,7 @@ export class MetamaskService{
 
             }
             this.auctionFactoryContract = new ethers.Contract(addresses.auctionFactoryContract, AuctionFactory.abi,this.signer);
+            this.nftContract = new ethers.Contract(addresses.auctionNFTContract, AuctionNFT.abi, this.signer);
             return true;
         }
         return false;
@@ -71,6 +74,16 @@ export class MetamaskService{
       return null;
     }
 
+    getNFTContract(){
+      if(this.nftContract!=null){
+        return this.nftContract;
+      }
+      // else{
+      //   // this.createAuctionFactoryContractInstance();
+      //   // this.getAuctionFactory();
+      // }
+      return null;
+    }
     getAccount(){
       return this.account;
     }

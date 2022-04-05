@@ -12,32 +12,32 @@ import AuctionNFT from '../../../../blockchain/artifacts/blockchain/contracts/Au
 })
 export class AuctionPageComponent implements OnInit {
 
-  auctionsAddresses:any;
-  auctionNFTAddresses:any;
-  auctionFactoryContract:any;
-  signer:any;
+  auctionsAddresses: any;
+  auctionFactoryContract: any;
+  nftContract:any;
+  signer: any;
   auctions: Array<any> = new Array();
-  nfts: Array<any> = new Array();
   aucc_nft: Array<Array<any>> = new Array();
-  constructor(private route: Router,public metamaskService:MetamaskService) { }
+  constructor(private route: Router, public metamaskService: MetamaskService) { }
 
-  ngOnInit():void {
+  ngOnInit(): void {
     this.auctionFactoryContract = this.metamaskService.getAuctionFactory();
+    this.nftContract = this.metamaskService.getNFTContract();
     this.signer = this.metamaskService.getSigner();
-    if(this.auctionFactoryContract==null){
+    if (this.auctionFactoryContract == null) {
       console.log("Am intrat");
       this.metamaskService.createAuctionFactoryContractInstance().then(
-        (response:boolean) =>{
-        if(response){
-          this.getAddresses();
-        }
-      }).catch((error:any) =>{
-        alert("Error ciudat rau de tot.")
-      });
-    }else{
+        (response: boolean) => {
+          if (response) {
+            this.getAddresses();
+          }
+        }).catch((error: any) => {
+          alert("Error ciudat rau de tot.")
+        });
+    } else {
       this.getAddresses();
     }
-    console.log("De ce:",this.auctionFactoryContract);
+    console.log("De ce:", this.auctionFactoryContract);
 
 
 
@@ -49,55 +49,37 @@ export class AuctionPageComponent implements OnInit {
     // }
 
   }
-  getAddresses(){
+  getAddresses() {
     this.signer = this.metamaskService.getSigner();
     const actualDate = new Date();
     this.auctionFactoryContract = this.metamaskService.getAuctionFactory();
-          if(this.auctionFactoryContract){
-            this.auctionFactoryContract.getAllAuctionNFTAddresses().then ( (response:string)=>{
-              console.log({NFT_uri:response});
-              this.auctionNFTAddresses = response;
-              this.auctionNFTAddresses.forEach((element:any) => {
-                var NFT = new ethers.Contract(element,AuctionNFT.abi,this.signer);
-
-                
-              });
-            }).catch((err:any)=>{
-              console.log({error:err})
-            });
-            this.auctionFactoryContract.getAllAuctionsAddresses().then(
-              (response: string) => {
-                console.log("Addresses:",response);
-                this.auctionsAddresses = response;
-                this.auctionsAddresses.forEach((element: any) =>{
-                  var auction : any = new ethers.Contract(element, Auction.abi, this.signer);
-                  auction.getItemEndTime().then((response: number) => {
-                    var d = new Date(0);
-                    d.setUTCSeconds(response);
-                    if(d.getTime() > actualDate.getTime()){
-                      this.auctions.push(auction);
-                    }
-                  }).catch((error:any) => {
-                    alert("Error when retrieving Auction end time");
-                  });
-
-                })
-              }).catch((error: any) => {
-                alert("Error when retrieving item name.")
-                console.log({getAddresses: error});
-              });
-              
-            this.auctionFactoryContract.getAllAuctionNFTAddresses().then((nft: any) => {
-              console.log({NFT: nft});
+    if (this.auctionFactoryContract) {
+      this.auctionFactoryContract.getAllAuctionsAddresses().then(
+        (response: string) => {
+          console.log("Addresses:", response);
+          this.auctionsAddresses = response;
+          this.auctionsAddresses.forEach((element: any) => {
+            var auction: any = new ethers.Contract(element, Auction.abi, this.signer);
+            auction.getItemEndTime().then((response: number) => {
+              var d = new Date(0);
+              d.setUTCSeconds(response);
+              if (d.getTime() > actualDate.getTime()) {
+                this.auctions.push(auction);
+              }
             }).catch((error: any) => {
-              console.log({NFT: error});
-              
-            })
-          }
+              alert("Error when retrieving Auction end time");
+            });
+
+          })
+        }).catch((error: any) => {
+          alert("Error when retrieving item name.")
+          console.log({ getAddresses: error });
+        });
+    }
   }
 
 
-  back(){
+  back() {
     this.route.navigateByUrl("");
   }
 }

@@ -7,7 +7,7 @@ export class PinataService{
 
     }
 
-    async pinFileToIPFS(imgBuffer: any){
+    async pinFileToIPFS(imgBuffer: any,){
         let formData = new FormData();
         let endPoint = secrets.pinataApiEndpoint + 'pinning/pinFileToIPFS';
 
@@ -32,8 +32,8 @@ export class PinataService{
 
         if(res){
             return {
-                success: true,
-                pinataUrl : 'https://gateway.pinata.cloud/ipfs/' + res.data.IpfsHash
+                succes: true,
+                image : 'https://gateway.pinata.cloud/ipfs/' + res.data.IpfsHash
             }
         }else {
             return {};
