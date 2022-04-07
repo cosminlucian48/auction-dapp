@@ -20,8 +20,10 @@ export class NftBoxComponent implements OnInit {
   ngOnInit(): void {
     this.signer = this.metamaskService.getSigner();
     this.NFT = this.metamaskService.getNFTContract();
+    this.NFT.ownerOf(14).then((res:any)=>{
+      console.log("OWNER LA 14:",res);
+    });
     console.log(this.NFT.address);
-    console.log("Mami:",this.nftId);
     this.NFT['tokenURI(uint256)'](this.nftId).then((res:any)=>{
       // console.log({URI:res});
       this.pinataUrl = JSON.parse(res).image;

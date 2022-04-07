@@ -8,7 +8,7 @@
     <p>Highest bid: {{itemHighestBidd}}</p>
     <p>End Time: {{itemEndTime}}</p>
     <p>Pending return for you: {{pendingReturnForUser}}</p>
-    <p>NFT address: {{auctionNftAddress}}</p>
+    <!-- <p>NFT address: {{auctionNftAddress}}</p> -->
     <!-- <label for="fname">Place your bid:</label> -->
     <mat-form-field  appearance="fill" *ngIf="stillLive">
       <mat-label>Your bid</mat-label>
@@ -18,6 +18,7 @@
   <br><br>
   <app-button label="Creare bid"  (click) = "bidOnAuction()" *ngIf="stillLive"></app-button>
   <app-button label="Withdraw"  (click) = "withdrawFromAuction()"></app-button>
+  <app-button label="End Auction"  (click) = "endAuction()"></app-button>
   </mat-card-content>
 </mat-card>
 

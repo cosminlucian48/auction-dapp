@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 export class AuctionBoxComponent implements OnInit {
 
   auctionFactoryContract: any;
-  nftContract:any;
+  nftContract: any;
   @Input() auction: any;
   signer: any;
   itemName: any;
@@ -36,8 +36,9 @@ export class AuctionBoxComponent implements OnInit {
   timeDifference: any;
   timer: any;
   nft: any;
-  nftUri:any;
-  imageUrl:any;
+  nftUri: any;
+  imageUrl: any;
+  nftId: any;
   private ethPrecision = 10 ** 18;
   constructor(
     public metamaskService: MetamaskService,
@@ -71,17 +72,6 @@ export class AuctionBoxComponent implements OnInit {
         const subscribe = source.subscribe(val => {
           console.log({ subscribe: val });
           this.stillLive = false;
-          this.auction.getBeneficiary().then((res: any) => {
-            // console.log("BENEF:", res);
-            this.auction.auctionEnd().then(() => {
-              console.log("S-o terminat lciitatia.");
-            }).catch((err: any) => {
-              console.log({ erroare: err });
-            });
-          }).catch((erro: any) => {
-            console.log({ error: erro })
-          })
-
         });
 
         this.itemEndTime = d.toLocaleString();
@@ -127,88 +117,37 @@ export class AuctionBoxComponent implements OnInit {
       this.pendingReturnForUser = (response / this.ethPrecision).toString();
     })
 
-    this.auction.getNFTId().then((res:any)=>{
-      console.log({nft_id:res.toString()});
-      this.nftContract.tokenURI(res.toString()).then((res_uri:any)=>{
+    this.auction.getNFTId().then((res: any) => {
+      console.log({ nft_id: res.toString() });
+      this.nftId = res.toString();
+      this.nftContract.tokenURI(res.toString()).then((res_uri: any) => {
         // console.log(JSON.parse(res_uri));
         this.nftUri = JSON.parse(res_uri);
         this.imageUrl = this.nftUri.image;
-      }).catch((err_uri:any)=>{
-        console.log({error:err_uri});
+      }).catch((err_uri: any) => {
+        console.log({ error: err_uri });
       })
-    }).catch((err:any)=>{
-      console.log({error:err});
+    }).catch((err: any) => {
+      console.log({ error: err });
     })
 
-
-    // this.nftContract.
-    // this.auction.getNFTAddress().then(
-    //   (res: string) => {
-    //     this.auctionNftAddress = res;
-    //     this.nft = new ethers.Contract(this.auctionNftAddress, AuctionNFT.abi, this.signer);
-    //     this.nft.getPinataUrl().then((res: any) => {
-    //       // console.log("URL?:", res)
-    //       this.pinataUrl = res;
-    //     }).catch((err: any) => {
-    //       console.log({ error: err });
-    //     });
-    //     let indexOutOfBounds = false;
-    //     let i = 0;
-    //     this.nft.totalSupply().then((res:any)=>{
-    //       console.log("TOTAL SUPPLY:", res);
-    //     }).catch((err:any)=>{
-    //       console.log({error:err});
+    // nft.ownerOf(1).then((res:any)=>{
+    //   console.log("OWENER:",res);
+    //   nft["safeTransferFrom(address,address,uint256)"](res, "0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199", 1).then((r:any)=>{
+    //     console.log({transfer:r});
+    //     nft.ownerOf(1).then((res2:any)=>{
+    //       console.log({ownernouw:res2})
+    //     }).catch((er:any)=>{
+    //       console.log({erownernou:er})
     //     })
-
-
-
-        // nft.ownerOf(1).then((res:any)=>{
-        //   console.log("OWENER:",res);
-        //   nft["safeTransferFrom(address,address,uint256)"](res, "0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199", 1).then((r:any)=>{
-        //     console.log({transfer:r});
-        //     nft.ownerOf(1).then((res2:any)=>{
-        //       console.log({ownernouw:res2})
-        //     }).catch((er:any)=>{
-        //       console.log({erownernou:er})
-        //     })
-        //   }).catch((vai:any)=>{
-        //     console.log({erlatransfer:vai})
-        //   })
-        // }).catch((err:any) =>{
-        //   console.log({error_owner:err})
-        // })
-      // }
-    // ).catch((err: any) => {
-    //   console.log({ error: err })
-    // });
-    // console.log(this.auctionNftAddress);
-    // let nft:any = new ethers.Contract(this.auctionNftAddress, AuctionNFT.abi, this.signer);
-    // nft.getPinataUrl().then((res:any)=>{
-    //   console.log("URL?:",res)
-    //   this.pinataUrl = res;
-    // }).catch((err:any)=>{
-    //   console.log({error:err});
-    // });
-    // let dateTime= new Date().getTime() / 1000;
-    // this.auctionFactoryContract = new ethers.ContractFactory( Auction.abi,Auction.bytecode,this.signer);
-
-    // const ceva = await this.auctionFactoryContract.deploy( 10, 'Ana');
-    // console.log(await ceva.getItemName(), ceva.address);
-
-    // const ceva2 = await this.auctionFactoryContract.deploy( 100, 'Marian');
-    // console.log(await ceva2.getItemName(), ceva2.address);
-
-    // const signer = this.metamaskService.getSigner();
-    // console.log("Singner:", signer);
-    // if(signer){
-    //   const contract_address = await this.auctionFactoryContract.checkAuction(0);
-    //   if(contract_address){
-    //     console.log(contract_address)
-    //     this.aucc = new ethers.Contract(contract_address, Auction.abi, signer);
-    //     console.log(await this.aucc.getItemName());
-    //     // console.log(this.auctionFactoryContract)
-    //   }
+    //   }).catch((vai:any)=>{
+    //     console.log({erlatransfer:vai})
+    //   })
+    // }).catch((err:any) =>{
+    //   console.log({error_owner:err})
+    // })
     // }
+
   }
 
   async bidOnAuction() {
@@ -244,4 +183,43 @@ export class AuctionBoxComponent implements OnInit {
       }
     })
   }
+
+  endAuction() {
+    const acount = this.metamaskService.getAccount();
+    this.auction.getBeneficiary().then((beneficiary: any) => {
+      // console.log("BENEF:", res);
+      this.auction.auctionEnd().then(() => {
+        console.log("S-o terminat lciitatia.");
+        this.auction.fHighestBiddder().then((highestBidder: any) => {
+          console.log({highestBidder,beneficiary,id:this.nftId});
+          this.nftContract["approve(address,uint256)"](highestBidder, this.nftId,{from:beneficiary}).then((approve: any) => {
+            console.log({ Approve: approve });
+            this.nftContract["safeTransferFrom(address,address,uint256)"](beneficiary, highestBidder, this.nftId, {from:beneficiary}).then((r: any) => {
+
+              console.log({ transfer: r });
+              this.nftContract.ownerOf(this.nftId).then((res2: any) => {
+                console.log({ ownernouw: res2 })
+              }).catch((er: any) => {
+                console.log({ erownernou: er })
+              });
+            }).catch((vai: any) => {
+              console.log({ erlatransfer: vai })
+            })
+          }).catch((err_approve: any) => {
+            console.log({ err_approve });
+          })
+
+        }).catch((error_hbidder: any) => {
+          console.log({ error_hbidder });
+        });
+
+      }).catch((err: any) => {
+        console.log({ error_owner: err })
+      });
+    }).catch((erro: any) => {
+      console.log({ error: erro })
+    });
+  }
 }
+
+

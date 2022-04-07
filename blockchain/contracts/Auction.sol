@@ -62,7 +62,7 @@ contract Auction{
 
         // beneficiary.call.value(3 ether).gas(20317)();
 
-        beneficiary.transfer(3 ether);
+        beneficiary.transfer(highestBid);
         // (bool sent, bytes memory data) = beneficiary.call{value: highestBid-1}(abi.encode(highestBid-1));
         // require(sent, "Failed to send Ether");
         
