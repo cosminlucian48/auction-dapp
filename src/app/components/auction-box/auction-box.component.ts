@@ -192,22 +192,29 @@ export class AuctionBoxComponent implements OnInit {
         console.log("S-o terminat lciitatia.");
         this.auction.fHighestBiddder().then((highestBidder: any) => {
           console.log({highestBidder,beneficiary,id:this.nftId});
-          this.nftContract["approve(address,uint256)"](highestBidder, this.nftId,{from:beneficiary}).then((approve: any) => {
-            console.log({ Approve: approve });
-            this.nftContract["safeTransferFrom(address,address,uint256)"](beneficiary, highestBidder, this.nftId, {from:beneficiary}).then((r: any) => {
-
-              console.log({ transfer: r });
-              this.nftContract.ownerOf(this.nftId).then((res2: any) => {
-                console.log({ ownernouw: res2 })
-              }).catch((er: any) => {
-                console.log({ erownernou: er })
-              });
-            }).catch((vai: any) => {
-              console.log({ erlatransfer: vai })
-            })
-          }).catch((err_approve: any) => {
-            console.log({ err_approve });
+          this.nftContract.transferNft(beneficiary, highestBidder, this.nftId, {from:beneficiary}).then((r:any)=>{
+            console.log("S-o facut ", r);
+            
+          }).catch((err:any)=>{
+            console.log({err});
           })
+          // this.nftContract["approve(address,uint256)"](highestBidder, this.nftId,{from:beneficiary}).then((approve: any) => {
+          //   console.log({ Approve: approve });
+          //   this.nftContract["safeTransferFrom(address,address,uint256)"](beneficiary, highestBidder, this.nftId, {from:beneficiary}).then((r: any) => {
+
+          //     console.log({ transfer: r });
+          //     this.nftContract.ownerOf(this.nftId).then((res2: any) => {
+          //       console.log({ ownernouw: res2 });
+          //       //to do, de schimbat owneru si in map
+          //     }).catch((er: any) => {
+          //       console.log({ erownernou: er })
+          //     });
+          //   }).catch((vai: any) => {
+          //     console.log({ erlatransfer: vai })
+          //   })
+          // }).catch((err_approve: any) => {
+          //   console.log({ err_approve });
+          // })
 
         }).catch((error_hbidder: any) => {
           console.log({ error_hbidder });

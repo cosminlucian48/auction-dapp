@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ethers } from 'ethers';
 import { MetamaskService } from 'src/app/services/metamask.service';
 import AuctionNFT from '../../../../blockchain/artifacts/blockchain/contracts/AuctionNFT.sol/AuctionNFT.json';
+import { PopUpCreateAuctionComponent } from '../pop-up-create-auction/pop-up-create-auction.component';
 
 @Component({
   selector: 'app-nft-box',
@@ -15,23 +17,26 @@ export class NftBoxComponent implements OnInit {
   @Input() nftId:any;
   signer:any;
   NFT:any;
-  constructor(public metamaskService:MetamaskService) { }
+  constructor(public metamaskService:MetamaskService,public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.signer = this.metamaskService.getSigner();
     this.NFT = this.metamaskService.getNFTContract();
-    this.NFT.ownerOf(14).then((res:any)=>{
-      console.log("OWNER LA 14:",res);
-    });
-    console.log(this.NFT.address);
     this.NFT['tokenURI(uint256)'](this.nftId).then((res:any)=>{
-      // console.log({URI:res});
+      console.log({URI:JSON.parse(res)});
       this.pinataUrl = JSON.parse(res).image;
+      this.itemName = JSON.parse(res).name;
     }).catch((err:any)=>{
       console.log({error_uri:err})
     })
     
 
   }
-
+  auctionNft(){
+    const dialogRef = this.dialog.open(PopUpCreateAuctionComponent, {
+      data:{nftId: this.nftId}
+    });
+  }
 }
+
+
