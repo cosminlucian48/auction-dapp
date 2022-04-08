@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { NotifierService } from 'angular-notifier';
 import { LandingPageComponent } from 'src/app/pages/landing-page/landing-page.component';
 import { MetamaskService } from 'src/app/services/metamask.service';
 import { PinataService } from 'src/app/services/pinata.service';
@@ -38,6 +39,7 @@ export class PopUpCreateNftComponent implements OnInit {
         this.nftContract.mintNFT(JSON.stringify(uri), { from: this.metamaskService.getAccount() }).then((res_mint: any) => {
           res_mint.wait().then((r: any) => {
             //id nft
+            this.notifier.notify("success","NFT succesfully.");
             this.nftId = parseInt(r.logs[0].topics[3], 16);
             console.log({ nftId: this.nftId });
             this.close();
@@ -45,7 +47,9 @@ export class PopUpCreateNftComponent implements OnInit {
             console.log({ error: err2 });
           })
         }).catch((err: any) => {
+          this.notifier.notify("error","NFT-ul nu a fost adaugat");
           console.log({ error: err });
+
         });
         this.nftContract.balanceOf(this.metamaskService.getAccount()).then((reS: any) => {
           console.log({ balancE: reS.toString() });
@@ -55,7 +59,7 @@ export class PopUpCreateNftComponent implements OnInit {
     }
   }
 
-  constructor(public metamaskService: MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, private route: Router, public pinataService: PinataService
+  constructor(public notifier:NotifierService, public metamaskService: MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, private route: Router, public pinataService: PinataService
   ) { }
 
   close(): void {

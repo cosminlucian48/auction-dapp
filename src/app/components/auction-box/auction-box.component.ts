@@ -124,7 +124,7 @@ export class AuctionBoxComponent implements OnInit {
       });
     this.auction.fInitialHighestBid().then(
       (response: string) => {
-        this.itemInitialBid = response;
+        this.itemInitialBid = parseInt(response)/this.ethPrecision;
       }).catch((error: any) => {
         {
           alert("Error when retrieving initial bidd.");
@@ -168,8 +168,8 @@ export class AuctionBoxComponent implements OnInit {
   }
 
   async bidOnAuction() {
-    
-    
+
+
     const account = this.metamaskService.getAccount();
     if (this.bidValue != 0) {
       this.auction.bid({ from: account, value: ethers.utils.parseEther(this.bidValue.toString()) }).then(
@@ -177,12 +177,13 @@ export class AuctionBoxComponent implements OnInit {
           this.notifier.notify("success","Bid succesfully.");
           console.log("Bid placed succesfully.", responseBid);
           responseBid.wait().then(() => {
-            
+
             this.itemHighestBidd = this.bidValue.toString();
           })
         }
       ).catch(
         (error: any) => {
+          this.notifier.notify("error","Bidul nu a fost creat");
           console.log(error);
         }
       );
@@ -196,11 +197,13 @@ export class AuctionBoxComponent implements OnInit {
     const account = this.metamaskService.getAccount();
     this.auction.withdraw({ from: account }).then((response: boolean) => {
       if (response) {
+        this.notifier.notify("success","Widraw successfully");
         console.log("daca taci sa taci");
         this.pendingReturnForUser = 0;
       }
       else {
-        console.log("ok")
+        console.log("ok");
+        this.notifier.notify("error","Widraw unsuccessfully");
       }
     })
   }
@@ -210,12 +213,14 @@ export class AuctionBoxComponent implements OnInit {
     this.auction.getBeneficiary().then((beneficiary: any) => {
       // console.log("BENEF:", res);
       this.auction.auctionEnd().then(() => {
+        this.notifier.notify("success","Licitatia s-a terminat");
         console.log("S-o terminat lciitatia.");
         this.auction.fHighestBiddder().then((highestBidder: any) => {
           console.log({highestBidder,beneficiary,id:this.nftId});
           this.nftContract.transferNft(beneficiary, highestBidder, this.nftId, {from:beneficiary}).then((r:any)=>{
             console.log("S-o facut ", r);
           }).catch((err:any)=>{
+            this.notifier.notify("error","Licitatia nu s-a terminat");
             console.log({err});
           })
           // this.nftContract["approve(address,uint256)"](highestBidder, this.nftId,{from:beneficiary}).then((approve: any) => {

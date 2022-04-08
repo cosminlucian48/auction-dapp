@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
+import { ethers } from 'ethers';
 import { LandingPageComponent } from 'src/app/pages/landing-page/landing-page.component';
 import { MetamaskService } from 'src/app/services/metamask.service';
 import { PinataService } from 'src/app/services/pinata.service';
@@ -29,7 +30,7 @@ export class PopUpCreateAuctionComponent implements OnInit {
     initialBid: new FormControl('')
   });
   modalService: any;
-  constructor(public metamaskService: MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, @Inject(MAT_DIALOG_DATA) public data: { nftId: any }, private route: Router, public pinataService: PinataService,
+  constructor(public metamaskService: MetamaskService,  public dialogRef: MatDialogRef<LandingPageComponent>, @Inject(MAT_DIALOG_DATA) public data: { nftId: any }, private route: Router, public pinataService: PinataService,
   public notifier:NotifierService) { }
 
   async onSubmit() {
@@ -41,19 +42,23 @@ export class PopUpCreateAuctionComponent implements OnInit {
       console.log({ URI: JSON.parse(res) });
       this.itemName = JSON.parse(res).name;
       if (this.auctionFactoryContract != null) {
+        console.log(this.profileForm.controls['initialBid'].value);
         this.auctionToBeCreated = this.auctionFactoryContract.newAuction(
           this.nftId,
           this.itemName,
-          this.profileForm.controls['initialBid'].value,
+          ethers.utils.parseEther(this.profileForm.controls['initialBid'].value),
           this.profileForm.controls['deploymentTime'].value,
           this.metamaskService.getAccount(),
           { from: this.metamaskService.getAccount() }).then(
             (responseBid: any) => {
               responseBid.wait().then(() => {
+                this.notifier.notify("success","Licitatia a fost creata");
                 this.close();
               })
             }).catch((error: any) => {
+
               console.log({ error_new_acti: error });
+              this.notifier.notify("error","Licitatia nu a fost creata");
             });
         if (this.auctionToBeCreated) {
 
