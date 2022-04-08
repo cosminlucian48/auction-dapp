@@ -16,8 +16,8 @@
     </mat-form-field>
 
   <br><br>
-  <app-button label="Creare bid"  (click) = "bidOnAuction()" *ngIf="stillLive"></app-button>
-  <app-button label="Withdraw"  (click) = "withdrawFromAuction()"></app-button>
+  <app-button label="Creare bid"  (click) = "bidOnAuction()" *ngIf="stillLive && !isSeller"></app-button>
+  <app-button label="Withdraw"  (click) = "withdrawFromAuction()" *ngIf="!isSeller"></app-button>
   <app-button label="End Auction"  (click) = "endAuction()"></app-button>
   </mat-card-content>
 </mat-card>

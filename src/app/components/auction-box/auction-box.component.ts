@@ -88,9 +88,17 @@ export class AuctionBoxComponent implements OnInit {
     // this.itemInitialBid = await this.auction.fInitialHighestBid();
 
     this.auction.getBeneficiary().then((benef:any)=>{
-      if(benef==this.metamaskService.getAccount()){
-        this.isSeller == true;
+      console.log(benef.toString())
+      console.log(this.metamaskService.getAccount().toString())
+      console.log(benef.toString().toLowerCase().localeCompare(this.metamaskService.getAccount().toString().toLowerCase()))
+      if(benef.toString().toLowerCase().localeCompare(this.metamaskService.getAccount().toString().toLowerCase())==0){
+        this.isSeller = true;
+        console.log("SELLER?:",this.isSeller);
+      }else{
+        console.log("Mortii mei")
       }
+    }).catch((err_benef:any)=>{
+      console.log({err_benef})
     })
     this.auction.getItemName().then(
       (response: string) => {
