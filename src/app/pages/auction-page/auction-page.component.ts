@@ -14,7 +14,7 @@ export class AuctionPageComponent implements OnInit {
 
   auctionsAddresses: any;
   auctionFactoryContract: any;
-  nftContract:any;
+  nftContract: any;
   signer: any;
   auctions: Array<any> = new Array();
   aucc_nft: Array<Array<any>> = new Array();
@@ -60,16 +60,20 @@ export class AuctionPageComponent implements OnInit {
           this.auctionsAddresses = response;
           this.auctionsAddresses.forEach((element: any) => {
             var auction: any = new ethers.Contract(element, Auction.abi, this.signer);
-            auction.getItemEndTime().then((response: number) => {
-              var d = new Date(0);
-              d.setUTCSeconds(response);
-              if (d.getTime() > actualDate.getTime()) {
-                this.auctions.push(auction);
-              }
-            }).catch((error: any) => {
-              alert("Error when retrieving Auction end time");
-            });
-
+            auction.getTotalBalanceOfContract().then((balance: any) => {
+              console.log("Total balance:", parseInt(balance.toString()));
+              auction.getItemEndTime().then((endTime: number) => {
+                var d = new Date(0);
+                d.setUTCSeconds(endTime);
+                if (parseInt(balance.toString()) > 0 ||  d.getTime() > actualDate.getTime()) {
+                  this.auctions.push(auction);
+                }
+              }).catch((err_time: any) => {
+                alert("Error when retrieving Auction end time");
+              })
+            }).catch((err_balance: any) => {
+              console.log({ err_balance });
+            })
           })
         }).catch((error: any) => {
           alert("Error when retrieving item name.")
@@ -77,8 +81,6 @@ export class AuctionPageComponent implements OnInit {
         });
     }
   }
-
-
   back() {
     this.route.navigateByUrl("");
   }

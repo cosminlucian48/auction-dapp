@@ -31,15 +31,36 @@ contract AuctionNFT is ERC721, Ownable {
         _setTokenURI(newItemId, tokenURI);
         return newItemId;
     }
-    function getNFTIdsForUser(address add)
+    function getNFTIdsForUser()
         public
         view
         returns (uint256[] memory)
     {
-        return userOwnedTokens[add];
+        return userOwnedTokens[msg.sender];
     }
 
     function getNftIds() public view returns (uint256[] memory) {
         return nftIds;
+    }
+
+    function deleteNftFromIndex(uint index, address owner) public{
+        uint256[] storage array = userOwnedTokens[owner];
+        // require (index < array.length, "Index out of bouds." );
+
+        for(uint poz = index; poz< array.length-1;poz++){
+            array[poz] = array[poz+1];
+        }
+        array.pop();
+        userOwnedTokens[owner] = array;
+
+    }
+
+    function transferNft(address from, address to, uint256 nftId) public {
+        approve(to,nftId);
+        safeTransferFrom(from,to,nftId);
+        deleteNftFromIndex(tokenIsAtIndex[nftId], from);
+
+        userOwnedTokens[to].push(nftId);
+        tokenIsAtIndex[nftId] = userOwnedTokens[to].length;
     }
 }

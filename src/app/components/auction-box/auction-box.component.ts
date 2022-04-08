@@ -10,6 +10,7 @@ import AuctionFactory from '../../../../blockchain/artifacts/blockchain/contract
 import { Meta } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { NotifierService } from 'angular-notifier';
 
 
 @Component({
@@ -39,10 +40,12 @@ export class AuctionBoxComponent implements OnInit {
   nftUri: any;
   imageUrl: any;
   nftId: any;
+  isSeller:boolean = false;
   private ethPrecision = 10 ** 18;
   constructor(
     public metamaskService: MetamaskService,
-    private router: Router) { }
+    private router: Router,
+    public notifier: NotifierService) { }
 
   async ngOnInit() {
     const datepipe: DatePipe = new DatePipe('en-US');
@@ -83,6 +86,12 @@ export class AuctionBoxComponent implements OnInit {
     // this.itemHighestBidd = await this.auction.fHighestBid();
     // this.itemHighestBidder = await this.auction.fHighestBiddder();
     // this.itemInitialBid = await this.auction.fInitialHighestBid();
+
+    this.auction.getBeneficiary().then((benef:any)=>{
+      if(benef==this.metamaskService.getAccount()){
+        this.isSeller == true;
+      }
+    })
     this.auction.getItemName().then(
       (response: string) => {
         this.itemName = response;
@@ -151,12 +160,16 @@ export class AuctionBoxComponent implements OnInit {
   }
 
   async bidOnAuction() {
+    
+    
     const account = this.metamaskService.getAccount();
     if (this.bidValue != 0) {
       this.auction.bid({ from: account, value: ethers.utils.parseEther(this.bidValue.toString()) }).then(
         (responseBid: any) => {
+          this.notifier.notify("success","Bid succesfully.");
           console.log("Bid placed succesfully.", responseBid);
           responseBid.wait().then(() => {
+            
             this.itemHighestBidd = this.bidValue.toString();
           })
         }
@@ -194,7 +207,6 @@ export class AuctionBoxComponent implements OnInit {
           console.log({highestBidder,beneficiary,id:this.nftId});
           this.nftContract.transferNft(beneficiary, highestBidder, this.nftId, {from:beneficiary}).then((r:any)=>{
             console.log("S-o facut ", r);
-            
           }).catch((err:any)=>{
             console.log({err});
           })

@@ -26,6 +26,7 @@ contract Auction{
     function bid() public payable{
         require(block.timestamp <= endTime, "Actiunea s-a terminat");
         require(msg.value > highestBid, "Bid-ul este prea mic");
+        require(msg.sender!=beneficiary,"You can't bid on your own auction.");
 
         if(highestBid != 0){
             pendingReturns[highestBidder] += highestBid;
@@ -47,7 +48,6 @@ contract Auction{
                 return false;
             }
         }
-        
         return true;
     }
 
@@ -55,6 +55,7 @@ contract Auction{
         require(block.timestamp >= endTime, "Actiunea nu s-a terminat");
         require(!timesUp, "Functia de end a fost deja apelata");
         require(highestBid>0,"Nu exista highest bid.");
+        require(msg.sender==beneficiary, "Only the seller can end the auction.");
         // require(address(this).balance > highestBid, "Nu ai destul eth.");
         timesUp = true;
         // emit AuctionEnded(highestBidder, highestBid);

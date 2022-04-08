@@ -30,17 +30,14 @@ export class NftPageComponent implements OnInit {
     }else{
       this.getAddresses();
     }
-    
-
   }
-
 
   getAddresses(){
     this.nftContract = this.metamaskService.getNFTContract();
     this.owner = this.metamaskService.getAccount();
     console.log(this.nftContract);
     console.log({owner:this.owner})
-    this.nftContract.getNFTIdsForUser(this.owner).then((res:any)=>{
+    this.nftContract.getNFTIdsForUser({from:this.owner}).then((res:any)=>{
       console.log({nfts:res});
       this.nftIds = res;
     }).catch((err:any) =>{

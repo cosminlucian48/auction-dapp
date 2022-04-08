@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { NotifierService } from 'angular-notifier';
 import { LandingPageComponent } from 'src/app/pages/landing-page/landing-page.component';
 import { MetamaskService } from 'src/app/services/metamask.service';
 import { PinataService } from 'src/app/services/pinata.service';
@@ -21,15 +22,15 @@ export class PopUpCreateAuctionComponent implements OnInit {
   nftId: any;
   NFT: any;
   itemName: any;
-
+  userIsOwner:any;
   profileForm = new FormGroup({
     nameItem: new FormControl(''),
     deploymentTime: new FormControl(''),
     initialBid: new FormControl('')
   });
   modalService: any;
-  constructor(public metamaskService: MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, @Inject(MAT_DIALOG_DATA) public data: { nftId: any }, private route: Router, public pinataService: PinataService
-  ) { }
+  constructor(public metamaskService: MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, @Inject(MAT_DIALOG_DATA) public data: { nftId: any }, private route: Router, public pinataService: PinataService,
+  public notifier:NotifierService) { }
 
   async onSubmit() {
     this.NFT = this.metamaskService.getNFTContract();
@@ -40,7 +41,6 @@ export class PopUpCreateAuctionComponent implements OnInit {
       console.log({ URI: JSON.parse(res) });
       this.itemName = JSON.parse(res).name;
       if (this.auctionFactoryContract != null) {
-
         this.auctionToBeCreated = this.auctionFactoryContract.newAuction(
           this.nftId,
           this.itemName,
@@ -70,13 +70,7 @@ export class PopUpCreateAuctionComponent implements OnInit {
     }).catch((err: any) => {
       console.log({ error_uri: err })
     })
-
-
-
-
   }
-
-
 
   close(): void {
     this.dialogRef.close();
@@ -91,3 +85,5 @@ export class PopUpCreateAuctionComponent implements OnInit {
   }
 
 }
+
+
