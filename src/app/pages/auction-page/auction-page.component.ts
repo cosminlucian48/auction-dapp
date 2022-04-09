@@ -17,7 +17,6 @@ export class AuctionPageComponent implements OnInit {
   nftContract: any;
   signer: any;
   auctions: Array<any> = new Array();
-  aucc_nft: Array<Array<any>> = new Array();
   constructor(private route: Router, public metamaskService: MetamaskService) { }
 
   ngOnInit(): void {
@@ -37,18 +36,8 @@ export class AuctionPageComponent implements OnInit {
     } else {
       this.getAddresses();
     }
-    console.log("De ce:", this.auctionFactoryContract);
-
-
-
-
-
-    // this.auctionsAddresses = await this.auctionFactoryContract.getAllAuctionsAddresses();
-    // if(this.auctionsAddresses){
-    //   console.log(this.auctionsAddresses);
-    // }
-
   }
+
   getAddresses() {
     this.signer = this.metamaskService.getSigner();
     const actualDate = new Date();
@@ -60,6 +49,7 @@ export class AuctionPageComponent implements OnInit {
           this.auctionsAddresses = response;
           this.auctionsAddresses.forEach((element: any) => {
             var auction: any = new ethers.Contract(element, Auction.abi, this.signer);
+
             auction.getTotalBalanceOfContract().then((balance: any) => {
               console.log("Total balance:", parseInt(balance.toString()));
               auction.getItemEndTime().then((endTime: number) => {
@@ -74,6 +64,7 @@ export class AuctionPageComponent implements OnInit {
             }).catch((err_balance: any) => {
               console.log({ err_balance });
             })
+
           })
         }).catch((error: any) => {
           alert("Error when retrieving item name.")

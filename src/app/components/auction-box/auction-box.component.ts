@@ -52,26 +52,14 @@ export class AuctionBoxComponent implements OnInit {
     this.nftContract = this.metamaskService.getNFTContract();
     this.signer = this.metamaskService.getSigner();
 
+    //preiau endtime
     this.auction.getItemEndTime().then(
       (response: number) => {
-
         var d = new Date(0);
         d.setUTCSeconds(response);
         const now = new Date();
         this.timeDifference = (d.getTime() - now.getTime()) + 10000;
         const source = timer(+this.timeDifference);
-        // console.log({ time_dif: this.timeDifference });
-        // console.log(source);
-        // this.auction.getTotalBalanceOfContract().then((res: number) => {
-        //   // console.log({ banicontract: res / this.ethPrecision });
-        // }).catch((erR: any) => {
-        //   console.log(erR);
-        // });
-        // this.auction.getBeneficiary().then((res: any) => {
-        //   // console.log("BENEF:", res);
-        // })
-
-
         const subscribe = source.subscribe(val => {
           console.log({ subscribe: val });
           this.stillLive = false;
@@ -82,30 +70,27 @@ export class AuctionBoxComponent implements OnInit {
         alert("Error when retrieving item name.")
       });
 
-    // this.itemName = await this.auction.getItemName();
-    // this.itemHighestBidd = await this.auction.fHighestBid();
-    // this.itemHighestBidder = await this.auction.fHighestBiddder();
-    // this.itemInitialBid = await this.auction.fInitialHighestBid();
-
+    //preiau beneficiarul
     this.auction.getBeneficiary().then((benef:any)=>{
       console.log(benef.toString())
       console.log(this.metamaskService.getAccount().toString())
       console.log(benef.toString().toLowerCase().localeCompare(this.metamaskService.getAccount().toString().toLowerCase()))
       if(benef.toString().toLowerCase().localeCompare(this.metamaskService.getAccount().toString().toLowerCase())==0){
         this.isSeller = true;
-        console.log("SELLER?:",this.isSeller);
-      }else{
-        console.log("Mortii mei")
       }
     }).catch((err_benef:any)=>{
       console.log({err_benef})
     })
+
+    //preiau numele nft ului
     this.auction.getItemName().then(
       (response: string) => {
         this.itemName = response;
       }).catch((error: any) => {
         alert("Error when retrieving item name.")
       });
+
+    //preiau highetbid
     this.auction.fHighestBid().then(
       (response: number) => {
         this.itemHighestBidd = response / this.ethPrecision;
@@ -114,6 +99,8 @@ export class AuctionBoxComponent implements OnInit {
           alert("Error when retrieving highest bid.")
         }
       });
+    
+    //preiau highest bidderul
     this.auction.fHighestBiddder().then(
       (response: string) => {
         this.itemHighestBidder = response;
@@ -122,7 +109,9 @@ export class AuctionBoxComponent implements OnInit {
           alert("Error when retrieving highest bidder.")
         }
       });
-    this.auction.fInitialHighestBid().then(
+
+    //preiau bidul initial
+    this.auction.fInitialBid().then(
       (response: string) => {
         this.itemInitialBid = parseInt(response)/this.ethPrecision;
       }).catch((error: any) => {
@@ -130,10 +119,13 @@ export class AuctionBoxComponent implements OnInit {
           alert("Error when retrieving initial bidd.");
         }
       });
+
+    //preiau pending returns pt useru de pe metamask
     this.auction.senderPendingReturns({ from: this.metamaskService.getAccount() }).then((response: number) => {
       this.pendingReturnForUser = (response / this.ethPrecision).toString();
     })
 
+    //preiau id ul nft ului
     this.auction.getNFTId().then((res: any) => {
       console.log({ nft_id: res.toString() });
       this.nftId = res.toString();
@@ -147,29 +139,9 @@ export class AuctionBoxComponent implements OnInit {
     }).catch((err: any) => {
       console.log({ error: err });
     })
-
-    // nft.ownerOf(1).then((res:any)=>{
-    //   console.log("OWENER:",res);
-    //   nft["safeTransferFrom(address,address,uint256)"](res, "0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199", 1).then((r:any)=>{
-    //     console.log({transfer:r});
-    //     nft.ownerOf(1).then((res2:any)=>{
-    //       console.log({ownernouw:res2})
-    //     }).catch((er:any)=>{
-    //       console.log({erownernou:er})
-    //     })
-    //   }).catch((vai:any)=>{
-    //     console.log({erlatransfer:vai})
-    //   })
-    // }).catch((err:any) =>{
-    //   console.log({error_owner:err})
-    // })
-    // }
-
   }
 
   async bidOnAuction() {
-
-
     const account = this.metamaskService.getAccount();
     if (this.bidValue != 0) {
       this.auction.bid({ from: account, value: ethers.utils.parseEther(this.bidValue.toString()) }).then(
@@ -177,7 +149,6 @@ export class AuctionBoxComponent implements OnInit {
           this.notifier.notify("success","Bid succesfully.");
           console.log("Bid placed succesfully.", responseBid);
           responseBid.wait().then(() => {
-
             this.itemHighestBidd = this.bidValue.toString();
           })
         }
@@ -188,22 +159,18 @@ export class AuctionBoxComponent implements OnInit {
         }
       );
     }
-
-    // if(mere){
-    //   console.log("MERE?:",mere);
-    // }
   }
+
   withdrawFromAuction() {
     const account = this.metamaskService.getAccount();
     this.auction.withdraw({ from: account }).then((response: boolean) => {
       if (response) {
-        this.notifier.notify("success","Widraw successfully");
-        console.log("daca taci sa taci");
+        this.notifier.notify("success","Withdraw successfully");
         this.pendingReturnForUser = 0;
       }
       else {
         console.log("ok");
-        this.notifier.notify("error","Widraw unsuccessfully");
+        this.notifier.notify("error","Withdraw unsuccessfully");
       }
     })
   }
@@ -213,34 +180,14 @@ export class AuctionBoxComponent implements OnInit {
     this.auction.getBeneficiary().then((beneficiary: any) => {
       // console.log("BENEF:", res);
       this.auction.auctionEnd().then(() => {
-        this.notifier.notify("success","Licitatia s-a terminat");
-        console.log("S-o terminat lciitatia.");
+        //cui sa i se transfere nft ul
         this.auction.fHighestBiddder().then((highestBidder: any) => {
-          console.log({highestBidder,beneficiary,id:this.nftId});
           this.nftContract.transferNft(beneficiary, highestBidder, this.nftId, {from:beneficiary}).then((r:any)=>{
-            console.log("S-o facut ", r);
+            this.notifier.notify("success","Nft transfered.");
           }).catch((err:any)=>{
             this.notifier.notify("error","Licitatia nu s-a terminat");
             console.log({err});
           })
-          // this.nftContract["approve(address,uint256)"](highestBidder, this.nftId,{from:beneficiary}).then((approve: any) => {
-          //   console.log({ Approve: approve });
-          //   this.nftContract["safeTransferFrom(address,address,uint256)"](beneficiary, highestBidder, this.nftId, {from:beneficiary}).then((r: any) => {
-
-          //     console.log({ transfer: r });
-          //     this.nftContract.ownerOf(this.nftId).then((res2: any) => {
-          //       console.log({ ownernouw: res2 });
-          //       //to do, de schimbat owneru si in map
-          //     }).catch((er: any) => {
-          //       console.log({ erownernou: er })
-          //     });
-          //   }).catch((vai: any) => {
-          //     console.log({ erlatransfer: vai })
-          //   })
-          // }).catch((err_approve: any) => {
-          //   console.log({ err_approve });
-          // })
-
         }).catch((error_hbidder: any) => {
           console.log({ error_hbidder });
         });

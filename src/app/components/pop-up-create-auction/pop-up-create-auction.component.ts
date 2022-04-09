@@ -25,7 +25,6 @@ export class PopUpCreateAuctionComponent implements OnInit {
   itemName: any;
   userIsOwner:any;
   profileForm = new FormGroup({
-    nameItem: new FormControl(''),
     deploymentTime: new FormControl(''),
     initialBid: new FormControl('')
   });
@@ -48,7 +47,6 @@ export class PopUpCreateAuctionComponent implements OnInit {
           this.itemName,
           ethers.utils.parseEther(this.profileForm.controls['initialBid'].value),
           this.profileForm.controls['deploymentTime'].value,
-          this.metamaskService.getAccount(),
           { from: this.metamaskService.getAccount() }).then(
             (responseBid: any) => {
               responseBid.wait().then(() => {

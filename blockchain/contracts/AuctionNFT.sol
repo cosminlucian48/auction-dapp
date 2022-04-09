@@ -2,9 +2,9 @@ pragma solidity 0.7.1;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract AuctionNFT is ERC721, Ownable {
+contract AuctionNFT is ERC721 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
     mapping(address => uint256[]) public userOwnedTokens;
@@ -45,14 +45,12 @@ contract AuctionNFT is ERC721, Ownable {
 
     function deleteNftFromIndex(uint index, address owner) public{
         uint256[] storage array = userOwnedTokens[owner];
-        // require (index < array.length, "Index out of bouds." );
 
         for(uint poz = index; poz< array.length-1;poz++){
             array[poz] = array[poz+1];
         }
         array.pop();
         userOwnedTokens[owner] = array;
-
     }
 
     function transferNft(address from, address to, uint256 nftId) public {

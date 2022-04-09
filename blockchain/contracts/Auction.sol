@@ -47,8 +47,8 @@ contract Auction {
     }
 
     function withdraw() public returns (bool) {
-        // require(msg.sender != highestBidder, "nu poti iesi de aicia ca ai cea mai mare suma");
-
+        require(msg.sender != highestBidder, "You are the highest Bidder.");
+        require(pendingReturns[msg.sender]>0, "Your pending returns are 0.");
         uint256 amount = pendingReturns[msg.sender];
         if (amount > 0) {
             pendingReturns[msg.sender] = 0;

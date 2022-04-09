@@ -20,14 +20,12 @@ export class PopUpCreateNftComponent implements OnInit {
   file: any;
   nftContract: any;
   nftId: any;
-
   profileForm = new FormGroup({
     nameItem: new FormControl('')
   });
   modalService: any;
 
   async onSubmit() {
-    // TODO: Use EventEmitter with form value
     console.warn(this.profileForm.value);
     if (this.auctionFactoryContract != null) {
       const res = await this.pinataService.pinFileToIPFS(this.file);
@@ -39,7 +37,7 @@ export class PopUpCreateNftComponent implements OnInit {
         this.nftContract.mintNFT(JSON.stringify(uri), { from: this.metamaskService.getAccount() }).then((res_mint: any) => {
           res_mint.wait().then((r: any) => {
             //id nft
-            this.notifier.notify("success","NFT succesfully.");
+            this.notifier.notify("success", "NFT succesfully.");
             this.nftId = parseInt(r.logs[0].topics[3], 16);
             console.log({ nftId: this.nftId });
             this.close();
@@ -47,19 +45,15 @@ export class PopUpCreateNftComponent implements OnInit {
             console.log({ error: err2 });
           })
         }).catch((err: any) => {
-          this.notifier.notify("error","NFT-ul nu a fost adaugat");
+          this.notifier.notify("error", "NFT-ul nu a fost adaugat");
           console.log({ error: err });
 
         });
-        this.nftContract.balanceOf(this.metamaskService.getAccount()).then((reS: any) => {
-          console.log({ balancE: reS.toString() });
-        })
       }
-
     }
   }
 
-  constructor(public notifier:NotifierService, public metamaskService: MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, private route: Router, public pinataService: PinataService
+  constructor(public notifier: NotifierService, public metamaskService: MetamaskService, public dialogRef: MatDialogRef<LandingPageComponent>, private route: Router, public pinataService: PinataService
   ) { }
 
   close(): void {
@@ -72,11 +66,7 @@ export class PopUpCreateNftComponent implements OnInit {
   ngOnInit(): void {
     this.auctionFactoryContract = this.metamaskService.getAuctionFactory();
     this.nftContract = this.metamaskService.getNFTContract();
-    console.log("Auction factory in dialog:", this.auctionFactoryContract)
   }
-
-
-
 }
 
 
