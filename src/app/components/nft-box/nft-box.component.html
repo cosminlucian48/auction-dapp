@@ -1,0 +1,14 @@
+<mat-card class="nft-box">
+  <mat-card-title-group>
+    <mat-card-title class="title">{{ itemName }}</mat-card-title>
+  </mat-card-title-group>
+  <mat-card-content>
+    <img class="img" mat-card-sm-image src="{{ pinataUrl }}" />
+
+    <app-button
+      class="button"
+      label="Auction NFT"
+      (click)="auctionNft()"
+    ></app-button>
+  </mat-card-content>
+</mat-card>

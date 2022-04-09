@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Creare NFT</h1>
+<div mat-dialog-content>
+  <form [formGroup]="profileForm">
+    <label for="name-item">Item name: </label>
+    <mat-form-field class="name-item" appearance="fill">
+      <mat-label>Item name</mat-label>
+      <input matInput id="name-item" type="text" formControlName="nameItem" />
+    </mat-form-field>
+    <br />
+    <button type="button" mat-raised-button (click)="fileInput.click()">
+      Adauga NFT
+    </button>
+    <input
+      hidden
+      (change)="onFileSelected($event)"
+      #fileInput
+      type="file"
+      id="file"
+    />
+  </form>
+  <br />
+  <app-button
+    label="Create NFT"
+    id="closeModal"
+    (click)="onSubmit()"
+  ></app-button>
+  <app-button label="Cancel" (click)="close()"></app-button>
+</div>

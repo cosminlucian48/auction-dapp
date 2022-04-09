@@ -1,2 +1,7 @@
 <app-header></app-header>
 <app-button class="back" label="Back" (click)="back()"></app-button>
+<div class="auction-box">
+  <div *ngFor="let nftId of nftIds">
+    <app-nft-box class="nft-box" [nftId]="nftId"></app-nft-box>
+  </div>
+</div>

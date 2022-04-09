@@ -6,7 +6,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./button.component.css']
 })
 export class ButtonComponent implements OnInit {
-
+  
   @Input() label="";
 
   @Output() onButtonClick: EventEmitter<void> = new EventEmitter<void>();
@@ -15,6 +15,7 @@ export class ButtonComponent implements OnInit {
   }
 
   handleButtonClick() {
+    
     this.onButtonClick.emit();
   }
 

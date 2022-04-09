@@ -1,23 +1,24 @@
 <mat-card class="auction-box">
   <mat-card-title-group>
     <mat-card-title>{{itemName}}</mat-card-title>
-    <img mat-card-sm-image src={{pinataUrl}} >
+    <img mat-card-sm-image src={{imageUrl}} >
   </mat-card-title-group>
   <mat-card-content>
     <p>Bid initial: {{itemInitialBid}}</p>
     <p>Highest bid: {{itemHighestBidd}}</p>
     <p>End Time: {{itemEndTime}}</p>
     <p>Pending return for you: {{pendingReturnForUser}}</p>
-    <p>NFT address: {{auctionNftAddress}}</p>
+    <!-- <p>NFT address: {{auctionNftAddress}}</p> -->
     <!-- <label for="fname">Place your bid:</label> -->
-    <mat-form-field  appearance="fill">
+    <mat-form-field  appearance="fill" *ngIf="stillLive && !isSeller">
       <mat-label>Your bid</mat-label>
       <input matInput type="text" id="fname" name="fname" [(ngModel)]="bidValue">
     </mat-form-field>
 
   <br><br>
-  <app-button label="Creare bid"  (click) = "bidOnAuction()"></app-button>
-  <app-button label="Withdraw"  (click) = "withdrawFromAuction()"></app-button>
+  <app-button label="Creare bid"  (click) = "bidOnAuction()" *ngIf="stillLive && !isSeller"></app-button>
+  <app-button label="Withdraw"  (click) = "withdrawFromAuction()" *ngIf="!isSeller"></app-button>
+  <app-button label="End Auction"  (click) = "endAuction()"></app-button>
   </mat-card-content>
 </mat-card>
 

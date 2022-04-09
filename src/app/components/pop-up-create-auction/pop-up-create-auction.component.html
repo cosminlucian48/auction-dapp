@@ -1,29 +1,34 @@
-<h1 mat-dialog-title>Creare licitatie</h1>
+<h1 mat-dialog-title>Creare NFT</h1>
 <div mat-dialog-content>
   <form [formGroup]="profileForm">
-
-    <label for="name-item">Item name: </label>
-    <mat-form-field class="name-item" appearance="fill">
-      <mat-label>Item name</mat-label>
-      <input matInput id="name-item" type="text" formControlName="nameItem" >
-    </mat-form-field>
-
     <label for="deployment-time">Deployment time (hours): </label>
     <mat-form-field class="name-item" appearance="fill">
       <mat-label>Deployment time</mat-label>
-      <input matInput id="deployment-time" type="text" formControlName="deploymentTime" >
+      <input
+        matInput
+        id="deployment-time"
+        type="text"
+        formControlName="deploymentTime"
+      />
     </mat-form-field>
 
     <label for="initial-bid">Initial bid: </label>
     <mat-form-field class="name-item" appearance="fill">
       <mat-label>Initial bid</mat-label>
-      <input matInput id="dinitial-bid" type="text" formControlName="initialBid" >
+      <input
+        matInput
+        id="dinitial-bid"
+        type="text"
+        formControlName="initialBid"
+      />
     </mat-form-field>
-    <br>
-    <button type="button" mat-raised-button (click)="fileInput.click()">Adauga NFT</button>
-<input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
+    <br />
   </form>
-  <br>
-  <app-button label="Adauga licitatie" id="closeModal" (click)="onSubmit()"></app-button>
+  <br />
+  <app-button
+    label="Adauga licitatie"
+    id="closeModal"
+    (click)="onSubmit()"
+  ></app-button>
   <app-button label="Cancel" (click)="close()"></app-button>
 </div>
