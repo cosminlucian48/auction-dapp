@@ -12,7 +12,6 @@ contract AuctionNFT is ERC721 {
     uint256[] public nftIds;
 
     constructor() public ERC721("AuctionNFT", "ANFT") {
-        // _mint(msg.sender, 1);
     }
 
     function mintNFT(string memory tokenURI)
@@ -25,7 +24,7 @@ contract AuctionNFT is ERC721 {
         nftIds.push(newItemId);
         userOwnedTokens[msg.sender].push(newItemId);
         uint256 arrayLength = userOwnedTokens[msg.sender].length;
-        tokenIsAtIndex[newItemId] = arrayLength;
+        tokenIsAtIndex[newItemId] = arrayLength - 1;
 
         _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
@@ -46,19 +45,30 @@ contract AuctionNFT is ERC721 {
     function deleteNftFromIndex(uint index, address owner) public{
         uint256[] storage array = userOwnedTokens[owner];
 
-        for(uint poz = index; poz< array.length-1;poz++){
-            array[poz] = array[poz+1];
-        }
+        // for(uint poz = index; poz< array.length-1;poz++){
+        //     array[poz] = array[poz+1];
+        //     uint256 nftIdLocal = array[poz];
+        //     tokenIsAtIndex[nftIdLocal] = tokenIsAtIndex[nftIdLocal] - 1;
+        // }
+        array[index] = array[array.length-1];
+        uint256 nftIdLocal = array[array.length -1];
         array.pop();
+        
+        tokenIsAtIndex[nftIdLocal] = index;
         userOwnedTokens[owner] = array;
     }
 
     function transferNft(address from, address to, uint256 nftId) public {
         approve(to,nftId);
         safeTransferFrom(from,to,nftId);
-        deleteNftFromIndex(tokenIsAtIndex[nftId], from);
+        uint index = tokenIsAtIndex[nftId];
+        deleteNftFromIndex(index, from);
 
         userOwnedTokens[to].push(nftId);
-        tokenIsAtIndex[nftId] = userOwnedTokens[to].length;
+        uint256 arrayLength = userOwnedTokens[to].length;
+        tokenIsAtIndex[nftId] = arrayLength;
+    }
+    function getSmt() public view returns (uint256){
+        return userOwnedTokens[msg.sender][userOwnedTokens[msg.sender].length-1];
     }
 }

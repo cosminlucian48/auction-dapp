@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\cbeja\\Documents\\proiecte\\auction-dapp-angular\\auction-dapp\\blockchain\\contracts\\Auction.sol": {
-      "lastModificationDate": 1649507833372,
-      "contentHash": "20c0976d69700bb107b274c0b1f25cb8",
+      "lastModificationDate": 1649546320898,
+      "contentHash": "48f93989f2559c6dc8cd9fe94e01c6c2",
       "sourceName": "blockchain/contracts/Auction.sol",
       "solcConfig": {
         "version": "0.7.1",
@@ -74,8 +74,8 @@
       ]
     },
     "C:\\Users\\cbeja\\Documents\\proiecte\\auction-dapp-angular\\auction-dapp\\blockchain\\contracts\\AuctionNFT.sol": {
-      "lastModificationDate": 1649510052596,
-      "contentHash": "3528ea7bdf46a0fc71dcb8d2b1576864",
+      "lastModificationDate": 1649585357959,
+      "contentHash": "703543df9e2a6bcca14c05fb7e9a1235",
       "sourceName": "blockchain/contracts/AuctionNFT.sol",
       "solcConfig": {
         "version": "0.7.1",

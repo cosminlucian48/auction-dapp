@@ -37,9 +37,11 @@ contract Auction {
             "You can't bid on your own auction."
         );
         require(msg.value > initialBid, "Bid prea mic");
+
         if (highestBid != 0) {
             pendingReturns[highestBidder] += highestBid;
         }
+
         highestBidder = msg.sender;
         highestBid = msg.value;
 
@@ -68,16 +70,10 @@ contract Auction {
             msg.sender == beneficiary,
             "Only the seller can end the auction."
         );
-        // require(address(this).balance > highestBid, "Nu ai destul eth.");
-        timesUp = true;
-        // emit AuctionEnded(highestBidder, highestBid);
-        // beneficiary.send(3 ether);
 
-        // beneficiary.call.value(3 ether).gas(20317)();
+        timesUp = true;
 
         beneficiary.transfer(highestBid);
-        // (bool sent, bytes memory data) = beneficiary.call{value: highestBid-1}(abi.encode(highestBid-1));
-        // require(sent, "Failed to send Ether");
     }
 
     function getTotalBalanceOfContract() public view returns (uint256) {
@@ -92,7 +88,7 @@ contract Auction {
         return highestBid;
     }
 
-    function fInitialHighestBid() public view returns (uint256) {
+    function getInitialBid() public view returns (uint256) {
         return initialBid;
     }
 

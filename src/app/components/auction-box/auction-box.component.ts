@@ -111,7 +111,7 @@ export class AuctionBoxComponent implements OnInit {
       });
 
     //preiau bidul initial
-    this.auction.fInitialBid().then(
+    this.auction.getInitialBid().then(
       (response: string) => {
         this.itemInitialBid = parseInt(response)/this.ethPrecision;
       }).catch((error: any) => {

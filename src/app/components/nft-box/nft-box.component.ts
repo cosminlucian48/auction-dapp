@@ -23,11 +23,17 @@ export class NftBoxComponent implements OnInit {
     this.signer = this.metamaskService.getSigner();
     this.NFT = this.metamaskService.getNFTContract();
     this.NFT['tokenURI(uint256)'](this.nftId).then((res:any)=>{
+      this.NFT['ownerOf(uint256)'](this.nftId).then((r:any)=>{
+        console.log(r);
+      })
       console.log({URI:JSON.parse(res)});
       this.pinataUrl = JSON.parse(res).image;
       this.itemName = JSON.parse(res).name;
     }).catch((err:any)=>{
       console.log({error_uri:err})
+    });
+    this.NFT.getSmt({from:this.metamaskService.getAccount()}).then((r:any)=>{
+      console.log(r.toString());
     })
     
 
