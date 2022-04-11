@@ -20,7 +20,7 @@ module.exports = {
     artifacts:"./blockchain/artifacts"
   },
   networks:{
-    local:{
+    local:{// parametrii blockchainului local
       url: secrets.localnode,
       accounts: [secrets.privateKeyLocalAccount]
     },
